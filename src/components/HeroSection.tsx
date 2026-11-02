@@ -56,7 +56,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenFlyer, onOpenAiC
 
             {/* Subtitle */}
             <p className="text-base sm:text-lg text-slate-700 dark:text-slate-300 font-medium leading-relaxed max-w-2xl">
-              100% Natural • No Preservatives • No Added Colours. Direct mill supply of red Palm Oil, crispy Garri, Cassava Flour, Plantain Flour, Amala Yam Flour, and hand-roasted Groundnut in Suleja with nationwide doorstep delivery.
+              100% Natural • No Preservatives • No Added Colours. Direct mill supply of red Palm Oil, crispy Garri, Cassava Flour, Plantain Flour, Amala Yam Flour, and hand-picked Groundnut in Suleja with nationwide doorstep delivery.
             </p>
 
             {/* Product Badges List */}

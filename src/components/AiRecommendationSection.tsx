@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Product } from '../data/products';
+import { Product, PRODUCTS } from '../data/products';
 import { PriceDropBadge } from './PriceDropBadge';
 import { COMPANY_INFO, createWhatsAppUrl } from '../data/companyInfo';
-import { Sparkles, Bot, ShoppingBag, Phone, RefreshCw, Star, ArrowRight } from 'lucide-react';
+import { Sparkles, Bot, ShoppingBag, Phone, RefreshCw, Star, ArrowRight, ZoomIn } from 'lucide-react';
 
 interface AiRecommendationSectionProps {
   onAddToCart: (product: Product, quantity: number) => void;
+  onProductClick?: (product: Product) => void;
   sessionData: {
     viewedProductIds: string[];
     categoryAffinities: Record<string, number>;
@@ -17,44 +18,94 @@ interface RecommendedProduct extends Product {
   aiReason?: string;
 }
 
+const getClientFallbackRecommendations = (
+  viewedProductIds: string[] = [],
+  categoryAffinities: Record<string, number> = {}
+): RecommendedProduct[] => {
+  const sortedCategories = Object.entries(categoryAffinities || {})
+    .sort((a, b) => (b[1] as number) - (a[1] as number))
+    .map(([cat]) => cat);
+
+  const primaryCat = sortedCategories[0] || 'palm_oil';
+  const categoryPicks = PRODUCTS.filter((p) => p.category === primaryCat);
+  const nonViewed = PRODUCTS.filter((p) => !viewedProductIds.includes(p.id));
+
+  const combined = Array.from(new Set([...categoryPicks, ...nonViewed, ...PRODUCTS]));
+  const selected = combined.slice(0, 4);
+
+  return selected.map((p) => ({
+    ...p,
+    aiReason:
+      p.category === primaryCat
+        ? `Top Pick in Organic Foodstuffs`
+        : p.isPopular
+        ? 'Top Seller in Suleja'
+        : 'Recommended for Your Kitchen'
+  }));
+};
+
 export const AiRecommendationSection: React.FC<AiRecommendationSectionProps> = ({
   onAddToCart,
+  onProductClick,
   sessionData
 }) => {
-  const [recommendations, setRecommendations] = useState<RecommendedProduct[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [recommendations, setRecommendations] = useState<RecommendedProduct[]>(() =>
+    getClientFallbackRecommendations(
+      sessionData.viewedProductIds,
+      sessionData.categoryAffinities
+    )
+  );
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
   const fetchRecommendations = async () => {
-    setLoading(true);
+    setIsRefreshing(true);
     try {
       const res = await fetch('/api/recommendations', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
         body: JSON.stringify(sessionData)
       });
+
+      const contentType = res.headers.get('content-type') || '';
+      if (!res.ok || !contentType.includes('application/json')) {
+        setRecommendations(
+          getClientFallbackRecommendations(
+            sessionData.viewedProductIds,
+            sessionData.categoryAffinities
+          )
+        );
+        return;
+      }
+
       const data = await res.json();
-      setRecommendations(data.recommendations || []);
-    } catch (err) {
-      console.error('Failed to fetch AI recommendations:', err);
+      if (Array.isArray(data?.recommendations) && data.recommendations.length > 0) {
+        setRecommendations(data.recommendations);
+      } else {
+        setRecommendations(
+          getClientFallbackRecommendations(
+            sessionData.viewedProductIds,
+            sessionData.categoryAffinities
+          )
+        );
+      }
+    } catch {
+      setRecommendations(
+        getClientFallbackRecommendations(
+          sessionData.viewedProductIds,
+          sessionData.categoryAffinities
+        )
+      );
     } finally {
-      setLoading(false);
+      setIsRefreshing(false);
     }
   };
 
   useEffect(() => {
     fetchRecommendations();
   }, [sessionData.viewedProductIds.length, sessionData.recentSearch]);
-
-  if (loading) {
-    return (
-      <div className="p-6 bg-amber-500/10 rounded-2xl border border-amber-300/40 space-y-4 text-center">
-        <div className="flex items-center justify-center gap-2 text-amber-700 dark:text-amber-400 font-bold text-sm">
-          <RefreshCw className="w-4 h-4 animate-spin text-amber-600" />
-          <span>AI Engine is analyzing your session preferences...</span>
-        </div>
-      </div>
-    );
-  }
 
   if (recommendations.length === 0) return null;
 
@@ -80,10 +131,11 @@ export const AiRecommendationSection: React.FC<AiRecommendationSectionProps> = (
 
         <button
           onClick={fetchRecommendations}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-amber-100 transition-colors"
+          disabled={isRefreshing}
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-amber-100 disabled:opacity-60 transition-colors"
         >
-          <RefreshCw className="w-3.5 h-3.5 text-amber-600" />
-          <span>Refresh AI Picks</span>
+          <RefreshCw className={`w-3.5 h-3.5 text-amber-600 ${isRefreshing ? 'animate-spin' : ''}`} />
+          <span>{isRefreshing ? 'Analyzing...' : 'Refresh AI Picks'}</span>
         </button>
       </div>
 
@@ -102,15 +154,28 @@ export const AiRecommendationSection: React.FC<AiRecommendationSectionProps> = (
               </div>
 
               {/* Image Frame */}
-              <div className="relative h-36 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800">
+              <div 
+                onClick={() => onProductClick?.(product)}
+                className="relative h-40 rounded-xl overflow-hidden bg-gradient-to-b from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-850 cursor-pointer group/rec"
+                title="Click to view full image and details"
+              >
                 <img
                   src={product.image}
                   alt={product.name}
-                  className="w-full h-full object-cover object-center"
+                  className="w-full h-full object-cover object-center group-hover/rec:scale-105 transition-transform duration-300"
                 />
+                <div className="absolute inset-0 bg-slate-950/30 opacity-0 group-hover/rec:opacity-100 transition-opacity flex items-center justify-center">
+                  <span className="p-1.5 rounded-lg bg-white/90 dark:bg-slate-900/90 text-slate-900 dark:text-white shadow-md text-[10px] font-bold flex items-center gap-1">
+                    <ZoomIn className="w-3.5 h-3.5 text-amber-600" />
+                    <span>View</span>
+                  </span>
+                </div>
               </div>
 
-              <h4 className="font-extrabold text-xs text-slate-900 dark:text-white line-clamp-2 leading-snug">
+              <h4 
+                onClick={() => onProductClick?.(product)}
+                className="font-extrabold text-xs text-slate-900 dark:text-white line-clamp-2 leading-snug cursor-pointer hover:text-amber-600 transition-colors"
+              >
                 {product.name}
               </h4>
 

@@ -41,7 +41,7 @@ export const PRODUCTS: Product[] = [
     stockCount: 45,
     rating: 4.9,
     reviewsCount: 128,
-    image: 'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&w=800&q=80',
+    image: '/assets/aistudio/image_f9f0ee99.png',
     badgeText: 'Lowest Price in 30 Days',
     uses: ['Soup & Stew Preparation', 'Local Delicacies', 'Traditional Cooking', 'Bakery & Food Processing']
   },
@@ -153,6 +153,28 @@ export const PRODUCTS: Product[] = [
     image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=800&q=80',
     badgeText: '17% OFF Bulk Bag',
     uses: ['Boarding Schools', 'Large Families', 'Restaurants']
+  },
+  {
+    id: 'palm-oil-bottles-assorted',
+    name: 'Pure Organic Palm Oil - Assorted Liters (1L, 1.5L, 2L, 4L Bottles)',
+    category: 'palm_oil',
+    price: 3800,
+    originalPrice: 4800,
+    unit: 'Bottle',
+    volumeOrWeight: '1L - 4L Bottles',
+    description: 'Authentic Reyflux 100% natural unadulterated red palm oil bottled in convenient kitchen sizes: 1 Litre, 1.5 Litres, 2 Litres, and 4 Litres with handle. Zero additives, zero colorants.',
+    isPopular: true,
+    isFlashSale: true,
+    claimedPercentage: 94,
+    isOrganic: true,
+    noPreservatives: true,
+    noColours: true,
+    stockCount: 50,
+    rating: 5.0,
+    reviewsCount: 168,
+    image: '/assets/aistudio/image_f9f0ee99.png',
+    badgeText: 'Authentic Reyflux Bottles • Top Choice',
+    uses: ['Daily Cooking & Stews', 'Kitchen Convenience', 'Restaurants & Homes']
   },
   {
     id: 'garri-white-ijebu-25kg',

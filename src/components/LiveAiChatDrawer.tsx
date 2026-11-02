@@ -19,7 +19,7 @@ export const LiveAiChatDrawer: React.FC<LiveAiChatDrawerProps> = ({ isOpen, onCl
     {
       id: 'welcome-1',
       role: 'assistant',
-      content: `Hello! 👋 Welcome to **REYFLUX ENTERPRISES LIMITED**.\n\nI am your **Reyflux AI Assistant**. Ask me about:\n- 🛢️ **Pure Organic Palm Oil** (4L, 10L, 25L, 50L)\n- 🥣 **Fresh Garri & Cassava Flour**\n- 💳 **POS Cash & Transfer Services**\n- 🚚 **Doorstep Delivery Fees & WhatsApp Orders**`,
+      content: `Hello! 👋 Welcome to **REYFLUX ENTERPRISES LIMITED**.\n\nI am your **Reyflux AI Assistant**. Ask me about:\n- 🛢️ **Pure Organic Palm Oil** (4L, 10L, 25L, 50L)\n- 🥣 **Crispy Yellow & White Garri**\n- 🌾 **High Quality Cassava Flour**\n- 🍌 **Plantain Flour & Amala Flour**\n- 🥜 **Groundnut (Crunchy & Raw)**\n- 🚚 **Doorstep Delivery Fees & WhatsApp Orders**`,
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     }
   ]);
@@ -38,6 +38,20 @@ export const LiveAiChatDrawer: React.FC<LiveAiChatDrawerProps> = ({ isOpen, onCl
   }, [messages, isOpen]);
 
   if (!isOpen) return null;
+
+  const getLocalChatReply = (query: string): string => {
+    const q = query.toLowerCase();
+    if (q.includes('price') || q.includes('cost') || q.includes('how much')) {
+      return `Here are our current direct-from-mill prices:\n- **Pure Organic Palm Oil**: 4L (₦14,500), 10L (₦34,000), 25L (₦82,000), 50L (₦160,000)\n- **Crispy Yellow Garri**: 5kg (₦7,500), 10kg (₦14,500), 25kg (₦34,000), 50kg (₦66,000)\n- **High Quality Cassava Flour**: 10kg (₦12,500), 50kg (₦57,000)\n- **Plantain Flour**: 5kg (₦8,500), 25kg (₦39,000)\n- **Amala Yam Flour**: 5kg (₦9,000), 25kg (₦42,000)\n- **Groundnut**: 2kg Jar (₦4,500), 10kg Raw (₦21,000)\n\nAll products are 100% natural with zero preservatives! Would you like to place an order?`;
+    }
+    if (q.includes('address') || q.includes('location') || q.includes('where')) {
+      return `📍 **Store Address**: Second Gate by Yaro College Road, Adjacent Alheri Plaza, Suleja, Niger State.\n\nWe offer fast doorstep delivery across Suleja, Minna, Abuja FCT, and nationwide!`;
+    }
+    if (q.includes('delivery') || q.includes('waybill') || q.includes('doorstep')) {
+      return `🚚 **Doorstep Delivery Service**:\nWe deliver quickly to homes, restaurants, schools, and stores across Suleja, Minna, Abuja FCT, and inter-state nationwide via registered logistics.\n\nContact us on WhatsApp or call **09064153934** to confirm your drop-off address!`;
+    }
+    return `We specialize exclusively in top-grade organic foodstuffs direct from source:\n- Pure Red Palm Oil (No colorants, unadulterated)\n- Crispy Yellow Garri & Extra Sour White Ijebu Garri\n- High Quality Cassava Flour\n- 100% Plantain Flour\n- Amala Yam Flour\n- Crunchy & Raw Groundnut\n\nFor instant ordering, call or WhatsApp us at **09064153934** / **07068581710**!`;
+  };
 
   const handleSendMessage = async (textToSend?: string) => {
     const text = (textToSend || inputMessage).trim();
@@ -62,13 +76,23 @@ export const LiveAiChatDrawer: React.FC<LiveAiChatDrawerProps> = ({ isOpen, onCl
 
       const res = await fetch('/api/chat', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
         body: JSON.stringify({ messages: history })
       });
 
-      const data = await res.json();
+      const contentType = res.headers.get('content-type') || '';
+      let aiReplyText = '';
+      if (res.ok && contentType.includes('application/json')) {
+        const data = await res.json();
+        aiReplyText = data.reply || data.error;
+      }
 
-      const aiReplyText = data.reply || data.error || 'I am happy to assist you with Garri, Palm Oil, Cassava Flour and POS services!';
+      if (!aiReplyText) {
+        aiReplyText = getLocalChatReply(text);
+      }
 
       const aiMsg: Message = {
         id: (Date.now() + 1).toString(),
@@ -78,14 +102,14 @@ export const LiveAiChatDrawer: React.FC<LiveAiChatDrawerProps> = ({ isOpen, onCl
       };
 
       setMessages((prev) => [...prev, aiMsg]);
-    } catch (err) {
-      console.error('Chat error:', err);
+    } catch {
+      const fallbackReply = getLocalChatReply(text);
       setMessages((prev) => [
         ...prev,
         {
           id: (Date.now() + 1).toString(),
           role: 'assistant',
-          content: 'I am currently offline or re-connecting. Please call or WhatsApp us directly at **09064153934** or **07068581710** for instant service!',
+          content: fallbackReply,
           time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         }
       ]);
@@ -96,8 +120,8 @@ export const LiveAiChatDrawer: React.FC<LiveAiChatDrawerProps> = ({ isOpen, onCl
 
   const samplePrompts = [
     "What are the current prices for 25L Palm Oil and Garri?",
-    "How does doorstep cash delivery work in Suleja?",
-    "Tell me about High Quality Cassava Flour and swallow tips.",
+    "How does doorstep delivery work in Suleja and Abuja?",
+    "Tell me about High Quality Cassava Flour and Plantain Flour.",
     "Give me the official WhatsApp line and store address."
   ];
 
@@ -116,7 +140,7 @@ export const LiveAiChatDrawer: React.FC<LiveAiChatDrawerProps> = ({ isOpen, onCl
                 <h2 className="text-sm font-extrabold leading-tight">Reyflux AI Assistant</h2>
                 <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
               </div>
-              <p className="text-[10px] text-amber-100 font-medium">Garri, Palm Oil, Cassava Flour & POS Advisor</p>
+              <p className="text-[10px] text-amber-100 font-medium">Foodstuffs & Orders Advisor (Suleja)</p>
             </div>
           </div>
 
@@ -214,7 +238,7 @@ export const LiveAiChatDrawer: React.FC<LiveAiChatDrawerProps> = ({ isOpen, onCl
           >
             <input
               type="text"
-              placeholder="Ask AI about Garri, Palm Oil, POS..."
+              placeholder="Ask AI about Palm Oil, Garri, Cassava, Plantain, Amala, Groundnut..."
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
               disabled={loading}

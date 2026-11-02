@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Product } from '../data/products';
+import { Product, PRODUCTS } from '../data/products';
 import { FlashSaleTimer } from './FlashSaleTimer';
 import { AiRecommendationSection } from './AiRecommendationSection';
 import { InfiniteProductFeed } from './InfiniteProductFeed';
+import { ProductImageModal } from './ProductImageModal';
 import { Calculator, Sparkles } from 'lucide-react';
 
 interface ProductStoreProps {
@@ -27,6 +28,9 @@ export const ProductStore: React.FC<ProductStoreProps> = ({
     recentSearch: ''
   });
 
+  // Modal view state for full proper image viewing
+  const [selectedProductForModal, setSelectedProductForModal] = useState<Product | null>(null);
+
   const trackProductClick = (product: Product) => {
     setSessionData((prev) => {
       const updatedViewed = Array.from(new Set([product.id, ...prev.viewedProductIds]));
@@ -40,6 +44,27 @@ export const ProductStore: React.FC<ProductStoreProps> = ({
         categoryAffinities: updatedAffinities
       };
     });
+  };
+
+  const handleProductClick = (product: Product) => {
+    trackProductClick(product);
+    setSelectedProductForModal(product);
+  };
+
+  const currentProductIndex = selectedProductForModal 
+    ? PRODUCTS.findIndex((p) => p.id === selectedProductForModal.id)
+    : -1;
+
+  const handleNavigatePrev = () => {
+    if (currentProductIndex === -1) return;
+    const prevIndex = (currentProductIndex - 1 + PRODUCTS.length) % PRODUCTS.length;
+    setSelectedProductForModal(PRODUCTS[prevIndex]);
+  };
+
+  const handleNavigateNext = () => {
+    if (currentProductIndex === -1) return;
+    const nextIndex = (currentProductIndex + 1) % PRODUCTS.length;
+    setSelectedProductForModal(PRODUCTS[nextIndex]);
   };
 
   const handleCategorySelect = (cat: string) => {
@@ -91,6 +116,7 @@ export const ProductStore: React.FC<ProductStoreProps> = ({
         {/* 2. REAL-TIME AI RECOMMENDATION ENGINE */}
         <AiRecommendationSection
           onAddToCart={onAddToCart}
+          onProductClick={handleProductClick}
           sessionData={sessionData}
         />
 
@@ -164,11 +190,23 @@ export const ProductStore: React.FC<ProductStoreProps> = ({
             }}
             selectedCategory={selectedCategory}
             onSelectCategory={handleCategorySelect}
-            onProductClick={trackProductClick}
+            onProductClick={handleProductClick}
           />
         </div>
 
       </div>
+
+      {/* Dedicated High-Resolution Product Image View Lightbox Modal */}
+      <ProductImageModal
+        product={selectedProductForModal}
+        isOpen={!!selectedProductForModal}
+        onClose={() => setSelectedProductForModal(null)}
+        onAddToCart={onAddToCart}
+        onNavigatePrev={handleNavigatePrev}
+        onNavigateNext={handleNavigateNext}
+        currentIndex={currentProductIndex}
+        totalProducts={PRODUCTS.length}
+      />
     </section>
   );
 };

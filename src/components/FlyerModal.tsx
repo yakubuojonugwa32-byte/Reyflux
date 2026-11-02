@@ -10,6 +10,7 @@ interface FlyerModalProps {
 
 export const FlyerModal: React.FC<FlyerModalProps> = ({ isOpen, onClose }) => {
   const [activeTab, setActiveTab] = useState<'flyer' | 'breakdown'>('flyer');
+  const [isZoomed, setIsZoomed] = useState<boolean>(false);
 
   if (!isOpen) return null;
 
@@ -55,27 +56,51 @@ export const FlyerModal: React.FC<FlyerModalProps> = ({ isOpen, onClose }) => {
         <div className="p-6 overflow-y-auto flex-1">
           {activeTab === 'flyer' ? (
             <div className="flex flex-col items-center gap-4">
-              <div className="relative group max-w-xl rounded-xl overflow-hidden shadow-2xl border-4 border-amber-400/80 bg-amber-900">
+              <div 
+                onClick={() => setIsZoomed(!isZoomed)}
+                className={`relative group rounded-xl overflow-hidden shadow-2xl border-4 border-amber-400/80 bg-amber-900 transition-all ${
+                  isZoomed ? 'cursor-zoom-out max-w-full' : 'cursor-zoom-in max-w-xl'
+                }`}
+              >
                 <img
                   src={COMPANY_INFO.flyerImagePath}
                   alt="Reyflux Enterprises Limited Official Flyer - Pure Organic Palm Oil, Garri, Cassava Flour, Plantain Flour, Amala Flour, Groundnut"
-                  className="w-full h-auto object-contain max-h-[60vh] transition-transform duration-300 group-hover:scale-[1.02]"
+                  className={`w-full h-auto object-contain transition-all duration-300 ${
+                    isZoomed ? 'max-h-[85vh] scale-105' : 'max-h-[60vh] group-hover:scale-[1.02]'
+                  }`}
                 />
                 
-                {/* Hotspot Indicators */}
-                <div className="absolute top-[35%] left-[45%] group/spot bg-red-600/90 text-white text-[11px] font-bold px-2.5 py-1 rounded-full shadow-lg border border-white flex items-center gap-1">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                  <span>Palm Oil (100% Organic)</span>
-                </div>
+                {/* Floating Zoom Indicator Button */}
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsZoomed(!isZoomed);
+                  }}
+                  className="absolute bottom-3 right-3 flex items-center gap-1.5 px-3 py-1.5 bg-slate-900/80 hover:bg-slate-900 text-white text-xs font-bold rounded-lg shadow-lg backdrop-blur-sm transition-all"
+                >
+                  <ZoomIn className="w-4 h-4 text-amber-400" />
+                  <span>{isZoomed ? 'Reset View' : 'Click to Zoom Full Poster'}</span>
+                </button>
 
-                <div className="absolute top-[60%] left-[25%] group/spot bg-amber-600/90 text-white text-[11px] font-bold px-2.5 py-1 rounded-full shadow-lg border border-white flex items-center gap-1">
-                  <span className="w-2 h-2 rounded-full bg-amber-300" />
-                  <span>Garri & Cassava Flour</span>
-                </div>
+                {/* Hotspot Indicators */}
+                {!isZoomed && (
+                  <>
+                    <div className="absolute top-[35%] left-[45%] group/spot bg-red-600/90 text-white text-[11px] font-bold px-2.5 py-1 rounded-full shadow-lg border border-white flex items-center gap-1">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                      <span>Palm Oil (100% Organic)</span>
+                    </div>
+
+                    <div className="absolute top-[60%] left-[25%] group/spot bg-amber-600/90 text-white text-[11px] font-bold px-2.5 py-1 rounded-full shadow-lg border border-white flex items-center gap-1">
+                      <span className="w-2 h-2 rounded-full bg-amber-300" />
+                      <span>Garri & Cassava Flour</span>
+                    </div>
+                  </>
+                )}
               </div>
 
               <p className="text-xs text-center text-slate-500 dark:text-slate-400 max-w-md">
-                Official advertisement banner for Reyflux Enterprises Limited in Suleja, Niger State. Guaranteed authentic products direct from primary processing.
+                Official advertisement banner for Reyflux Enterprises Limited in Suleja, Niger State. Guaranteed authentic products direct from primary processing. Click image to toggle full zoom view.
               </p>
             </div>
           ) : (

@@ -2,7 +2,7 @@ import express from 'express';
 import { createServer as createViteServer } from 'vite';
 import { GoogleGenAI } from '@google/genai';
 import dotenv from 'dotenv';
-import { PRODUCTS, Product } from './src/data/products.js';
+import { PRODUCTS, Product } from './src/data/products';
 
 dotenv.config();
 
@@ -11,15 +11,45 @@ const PORT = Number(process.env.PORT) || 3000;
 
 app.use(express.json());
 
-// Server-side Gemini AI initialization
-const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY,
-  httpOptions: {
-    headers: {
-      'User-Agent': 'aistudio-build'
-    }
-  }
-});
+// Server-side Gemini AI initialization (safe when API key is not present)
+const apiKey = process.env.GEMINI_API_KEY;
+const ai = apiKey
+  ? new GoogleGenAI({
+      apiKey,
+      httpOptions: {
+        headers: {
+          'User-Agent': 'aistudio-build'
+        }
+      }
+    })
+  : null;
+
+// Helper to generate consistent recommendations from catalog
+const generateFallbackRecommendations = (
+  viewedProductIds: string[] = [],
+  categoryAffinities: Record<string, number> = {}
+) => {
+  const sortedCategories = Object.entries(categoryAffinities)
+    .sort((a, b) => (b[1] as number) - (a[1] as number))
+    .map(([cat]) => cat);
+
+  const primaryCat = sortedCategories[0] || 'palm_oil';
+  const categoryPicks = PRODUCTS.filter((p) => p.category === primaryCat);
+  const nonViewed = PRODUCTS.filter((p) => !viewedProductIds.includes(p.id));
+
+  const combined = Array.from(new Set([...categoryPicks, ...nonViewed, ...PRODUCTS]));
+  const selected = combined.slice(0, 4);
+
+  return selected.map((p) => ({
+    ...p,
+    aiReason:
+      p.category === primaryCat
+        ? `Top Pick in Organic Foodstuffs`
+        : p.isPopular
+        ? 'Top Seller in Suleja'
+        : 'Recommended for Your Kitchen'
+  }));
+};
 
 // 1. CURSOR-BASED PAGINATION API FOR INFINITE SCROLL DISCOVERY FEED
 app.get('/api/products/infinite', (req, res) => {
@@ -61,31 +91,15 @@ app.get('/api/products/infinite', (req, res) => {
   }
 });
 
-// 2. REAL-TIME AI RECOMMENDATION ENGINE ENDPOINT
-app.post('/api/recommendations', async (req, res) => {
-  const { viewedProductIds = [], categoryAffinities = {}, recentSearch = '' } = req.body;
+// 2. REAL-TIME AI RECOMMENDATION ENGINE ENDPOINT (Accepts both GET and POST)
+app.all('/api/recommendations', async (req, res) => {
+  const reqData = req.method === 'POST' ? req.body || {} : req.query || {};
+  const { viewedProductIds = [], categoryAffinities = {}, recentSearch = '' } = reqData;
 
-  const generateFallbackRecommendations = () => {
-    const sortedCategories = Object.entries(categoryAffinities)
-      .sort((a, b) => (b[1] as number) - (a[1] as number))
-      .map(([cat]) => cat);
-
-    const primaryCat = sortedCategories[0] || 'palm_oil';
-    const categoryPicks = PRODUCTS.filter((p) => p.category === primaryCat);
-    const nonViewed = PRODUCTS.filter((p) => !viewedProductIds.includes(p.id));
-
-    const combined = Array.from(new Set([...categoryPicks, ...nonViewed, ...PRODUCTS]));
-    const selected = combined.slice(0, 4);
-
-    return selected.map((p) => ({
-      ...p,
-      aiReason: p.category === primaryCat
-        ? `Top Pick in Organic Foodstuffs`
-        : p.isPopular
-        ? 'Top Seller in Suleja'
-        : 'Recommended for Your Kitchen'
-    }));
-  };
+  // If no AI key available, immediately return smart algorithmic recommendations
+  if (!ai) {
+    return res.json({ recommendations: generateFallbackRecommendations(viewedProductIds, categoryAffinities) });
+  }
 
   try {
     const catalogSummary = PRODUCTS.map((p) => ({
@@ -135,7 +149,7 @@ Return valid JSON in this structure:
     let recommendedIds: Array<{ id: string; reason: string }> = resultJson.recommendations || [];
 
     if (!recommendedIds || recommendedIds.length < 4) {
-      return res.json({ recommendations: generateFallbackRecommendations() });
+      return res.json({ recommendations: generateFallbackRecommendations(viewedProductIds, categoryAffinities) });
     }
 
     const recommendedProducts = recommendedIds.map((rec) => {
@@ -148,9 +162,22 @@ Return valid JSON in this structure:
 
     res.json({ recommendations: recommendedProducts });
   } catch (err: any) {
-    res.json({ recommendations: generateFallbackRecommendations() });
+    res.json({ recommendations: generateFallbackRecommendations(viewedProductIds, categoryAffinities) });
   }
 });
+
+// Helper for local chat reply
+const getLocalChatReply = (lastMsg: string) => {
+  let reply = `Welcome to Reyflux Enterprises Limited! 👋\n\n`;
+  if (lastMsg.includes('price') || lastMsg.includes('cost') || lastMsg.includes('how much')) {
+    reply += `Here are our current direct-from-mill prices:\n- **Pure Organic Palm Oil**: 4L (₦14,500), 10L (₦34,000), 25L (₦82,000)\n- **Crispy Yellow Garri**: 5kg (₦7,500), 10kg (₦14,500), 25kg (₦34,000), 50kg (₦66,000)\n- **High Quality Cassava Flour**: 10kg (₦12,500), 50kg (₦57,000)\n- **Plantain Flour**: 5kg (₦8,500), 25kg (₦39,000)\n- **Amala Yam Flour**: 5kg (₦9,000), 25kg (₦42,000)\n- **Groundnut**: 2kg Jar (₦4,500), 10kg Raw (₦21,000)\n\nAll products are 100% natural with zero preservatives!`;
+  } else if (lastMsg.includes('address') || lastMsg.includes('location') || lastMsg.includes('where')) {
+    reply += `📍 **Store Address**: Second Gate by Yaro College Road, Adjacent Alheri Plaza, Suleja, Niger State.\n\nWe offer fast doorstep delivery across Suleja, Minna, Abuja FCT, and nationwide!`;
+  } else {
+    reply += `I am here to assist you with fresh Yellow & White Garri, Pure Organic Palm Oil, High Quality Cassava Flour, Plantain Flour, Amala Flour, and Groundnut in Suleja.\n\nFor instant order placement or waybill delivery, click the WhatsApp button or call us directly at **09064153934** or **07068581710**!`;
+  }
+  return reply;
+};
 
 // 3. AI CHAT ENDPOINT FOR REYFLUX LIVE ASSISTANT
 app.post('/api/chat', async (req, res) => {
@@ -158,6 +185,12 @@ app.post('/api/chat', async (req, res) => {
     const { messages } = req.body;
     if (!messages || !Array.isArray(messages) || messages.length === 0) {
       return res.status(400).json({ error: 'Messages array is required' });
+    }
+
+    const lastMsg = (messages[messages.length - 1]?.content || '').toLowerCase();
+
+    if (!ai) {
+      return res.json({ reply: getLocalChatReply(lastMsg) });
     }
 
     const systemInstruction = `You are "Reyflux AI Assistant", the official live advisor for REYFLUX ENTERPRISES LIMITED.
@@ -185,6 +218,8 @@ DOORSTEP DELIVERY:
 Guidelines:
 - Maintain a warm, friendly, helpful Nigerian business tone.
 - Focus strictly on these 6 food products (Palm oil, Garri, Cassava flour, Plantain flour, Amala flour, Groundnut).
+- Never mention POS.
+- Never describe groundnut as roasted.
 - Answer questions about prices, recipe ideas, storage tips, health benefits, and bulk orders.
 - Always include helpful call-to-actions, encouraging the user to click the WhatsApp button or call 09064153934 / 07068581710 to confirm their order.
 - Keep responses readable, succinct (1-3 paragraphs), and enthusiastic!`;
@@ -205,18 +240,13 @@ Guidelines:
     res.json({ reply: response.text || 'I am here to assist with Palm Oil, Garri, Cassava Flour, Plantain Flour, Amala Flour, and Groundnut orders!' });
   } catch (err: any) {
     const lastMsg = (req.body?.messages?.slice(-1)[0]?.content || '').toLowerCase();
-
-    let reply = `Welcome to Reyflux Enterprises Limited! 👋\n\n`;
-    if (lastMsg.includes('price') || lastMsg.includes('cost') || lastMsg.includes('how much')) {
-      reply += `Here are our current direct-from-mill prices:\n- **Pure Organic Palm Oil**: 4L (₦14,500), 10L (₦34,000), 25L (₦82,000)\n- **Crispy Yellow Garri**: 5kg (₦7,500), 10kg (₦14,500), 25kg (₦34,000), 50kg (₦66,000)\n- **High Quality Cassava Flour**: 10kg (₦12,500), 50kg (₦57,000)\n- **Plantain Flour**: 5kg (₦8,500), 25kg (₦39,000)\n- **Amala Yam Flour**: 5kg (₦9,000), 25kg (₦42,000)\n- **Groundnut**: 2kg Jar (₦4,500), 10kg Raw (₦21,000)\n\nAll products are 100% natural with zero preservatives!`;
-    } else if (lastMsg.includes('address') || lastMsg.includes('location') || lastMsg.includes('where')) {
-      reply += `📍 **Store Address**: Second Gate by Yaro College Road, Adjacent Alheri Plaza, Suleja, Niger State.\n\nWe offer fast doorstep delivery across Suleja, Minna, Abuja FCT, and nationwide!`;
-    } else {
-      reply += `I am here to assist you with fresh Yellow & White Garri, Pure Organic Palm Oil, High Quality Cassava Flour, Plantain Flour, Amala Flour, and Groundnut in Suleja.\n\nFor instant order placement or waybill delivery, click the WhatsApp button or call us directly at **09064153934** or **07068581710**!`;
-    }
-
-    res.json({ reply });
+    res.json({ reply: getLocalChatReply(lastMsg) });
   }
+});
+
+// 4. API 404 CATCH-ALL (Guarantees JSON response for any API route, prevents Vite HTML fallback)
+app.all('/api/*', (req, res) => {
+  res.status(404).json({ error: `API route not found: ${req.method} ${req.path}` });
 });
 
 // Start Express + Vite Middleware

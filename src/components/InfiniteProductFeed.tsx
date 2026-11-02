@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Product } from '../data/products';
+import { Product, PRODUCTS } from '../data/products';
 import { PriceDropBadge } from './PriceDropBadge';
 import { COMPANY_INFO, createWhatsAppUrl } from '../data/companyInfo';
-import { ShoppingBag, Phone, Star, Search, Filter, Loader2, Sparkles, CheckCircle2 } from 'lucide-react';
+import { ShoppingBag, Phone, Star, Search, Filter, Loader2, Sparkles, CheckCircle2, ZoomIn } from 'lucide-react';
 
 interface InfiniteProductFeedProps {
   onAddToCart: (product: Product, quantity: number) => void;
@@ -11,14 +11,45 @@ interface InfiniteProductFeedProps {
   onProductClick?: (product: Product) => void;
 }
 
+const getLocalFilteredProducts = (
+  category: string,
+  search: string,
+  cursor: string | null,
+  limit: number = 6
+) => {
+  const q = search.toLowerCase().trim();
+  const filtered = PRODUCTS.filter((item) => {
+    const matchesCategory = category === 'all' || item.category === category;
+    const matchesSearch =
+      !q ||
+      item.name.toLowerCase().includes(q) ||
+      item.description.toLowerCase().includes(q);
+    return matchesCategory && matchesSearch;
+  });
+
+  let startIndex = 0;
+  if (cursor) {
+    const foundIdx = filtered.findIndex((p) => p.id === cursor);
+    if (foundIdx !== -1) {
+      startIndex = foundIdx + 1;
+    }
+  }
+
+  const items = filtered.slice(startIndex, startIndex + limit);
+  const hasMore = startIndex + limit < filtered.length;
+  const nextCursor = hasMore && items.length > 0 ? items[items.length - 1].id : null;
+
+  return { items, hasMore, nextCursor };
+};
+
 export const InfiniteProductFeed: React.FC<InfiniteProductFeedProps> = ({
   onAddToCart,
   selectedCategory,
   onSelectCategory,
   onProductClick
 }) => {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [cursor, setCursor] = useState<string | null>(null);
+  const [products, setProducts] = useState<Product[]>(() => PRODUCTS.slice(0, 9));
+  const [cursor, setCursor] = useState<string | null>(() => PRODUCTS[8]?.id || null);
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -33,25 +64,60 @@ export const InfiniteProductFeed: React.FC<InfiniteProductFeedProps> = ({
       try {
         const currentCursor = isReset ? '' : cursor || '';
         const params = new URLSearchParams({
-          limit: '6',
+          limit: '9',
           cursor: currentCursor,
           category: selectedCategory,
           search: searchQuery
         });
 
-        const res = await fetch(`/api/products/infinite?${params.toString()}`);
-        const data = await res.json();
+        const res = await fetch(`/api/products/infinite?${params.toString()}`, {
+          headers: { Accept: 'application/json' }
+        });
+        const contentType = res.headers.get('content-type') || '';
 
-        if (isReset) {
-          setProducts(data.items || []);
+        let items: Product[] = [];
+        let nextCursor: string | null = null;
+        let more = false;
+
+        if (res.ok && contentType.includes('application/json')) {
+          const data = await res.json();
+          items = data.items || [];
+          nextCursor = data.nextCursor;
+          more = !!data.hasMore;
         } else {
-          setProducts((prev) => [...prev, ...(data.items || [])]);
+          const local = getLocalFilteredProducts(
+            selectedCategory,
+            searchQuery,
+            currentCursor,
+            9
+          );
+          items = local.items;
+          nextCursor = local.nextCursor;
+          more = local.hasMore;
         }
 
-        setCursor(data.nextCursor);
-        setHasMore(data.hasMore);
-      } catch (err) {
-        console.error('Error fetching infinite products:', err);
+        if (isReset) {
+          setProducts(items);
+        } else {
+          setProducts((prev) => [...prev, ...items]);
+        }
+
+        setCursor(nextCursor);
+        setHasMore(more);
+      } catch {
+        const local = getLocalFilteredProducts(
+          selectedCategory,
+          searchQuery,
+          isReset ? '' : cursor,
+          9
+        );
+        if (isReset) {
+          setProducts(local.items);
+        } else {
+          setProducts((prev) => [...prev, ...local.items]);
+        }
+        setCursor(local.nextCursor);
+        setHasMore(local.hasMore);
       } finally {
         setLoading(false);
       }
@@ -147,7 +213,8 @@ export const InfiniteProductFeed: React.FC<InfiniteProductFeedProps> = ({
               {/* Product Image Frame */}
               <div
                 onClick={() => onProductClick?.(product)}
-                className="relative h-52 bg-slate-100 dark:bg-slate-800 overflow-hidden cursor-pointer"
+                className="relative h-60 bg-gradient-to-b from-slate-100 to-slate-200/80 dark:from-slate-800 dark:to-slate-850 overflow-hidden cursor-pointer group/img"
+                title="Click to view full uncropped image"
               >
                 <img
                   src={product.image}
@@ -156,8 +223,16 @@ export const InfiniteProductFeed: React.FC<InfiniteProductFeedProps> = ({
                   loading="lazy"
                 />
 
-                {/* Top Badges */}
-                <div className="absolute top-3 left-3 flex flex-col gap-1 items-start">
+                {/* Hover Full Image View Overlay */}
+                <div className="absolute inset-0 bg-slate-950/40 backdrop-blur-[1px] opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs font-black shadow-xl transform translate-y-1 group-hover:translate-y-0 transition-transform">
+                    <ZoomIn className="w-3.5 h-3.5 text-amber-600" />
+                    <span>View Image</span>
+                  </span>
+                </div>
+
+                {/* Top Left Badges */}
+                <div className="absolute top-3 left-3 flex flex-col gap-1 items-start z-10 pointer-events-none">
                   <span className="bg-red-600 text-white text-[10px] font-extrabold uppercase px-2 py-0.5 rounded shadow-sm">
                     {product.badgeText || 'Best Price'}
                   </span>
@@ -166,7 +241,15 @@ export const InfiniteProductFeed: React.FC<InfiniteProductFeedProps> = ({
                   </span>
                 </div>
 
-                <div className="absolute bottom-3 right-3 bg-slate-900/80 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-0.5 rounded">
+                {/* Top Right Quick Zoom Badge */}
+                <div className="absolute top-3 right-3 z-10">
+                  <span className="flex items-center gap-1 p-1.5 rounded-lg bg-black/60 text-white hover:bg-black/80 backdrop-blur-xs text-[10px] font-bold shadow-sm transition-colors">
+                    <ZoomIn className="w-3.5 h-3.5 text-amber-300" />
+                    <span className="hidden sm:inline">Zoom</span>
+                  </span>
+                </div>
+
+                <div className="absolute bottom-3 right-3 bg-slate-900/80 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-0.5 rounded z-10">
                   {product.stockCount} in stock
                 </div>
               </div>
