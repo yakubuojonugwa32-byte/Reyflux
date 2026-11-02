@@ -89,10 +89,13 @@ export const InfiniteProductFeed: React.FC<InfiniteProductFeedProps> = ({
   }, [fetchProducts, hasMore, loading]);
 
   const categories = [
-    { id: 'all', label: 'All Products' },
-    { id: 'palm_oil', label: 'Pure Organic Palm Oil' },
+    { id: 'all', label: 'All Foodstuffs' },
+    { id: 'palm_oil', label: 'Pure Palm Oil' },
     { id: 'garri', label: 'Crispy Garri' },
     { id: 'cassava_flour', label: 'Cassava Flour' },
+    { id: 'plantain_flour', label: 'Plantain Flour' },
+    { id: 'amala_flour', label: 'Amala Flour' },
+    { id: 'groundnut', label: 'Groundnut' },
     { id: 'bulk_wholesale', label: 'Bulk Bundles' }
   ];
 
@@ -124,7 +127,7 @@ export const InfiniteProductFeed: React.FC<InfiniteProductFeedProps> = ({
           <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
-            placeholder="Search Garri, Palm Oil..."
+            placeholder="Search Garri, Palm Oil, Amala..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-9 pr-4 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500"

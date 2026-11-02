@@ -1,6 +1,7 @@
 import React from 'react';
 import { Phone, MapPin, Truck, ShieldCheck, Heart } from 'lucide-react';
 import { COMPANY_INFO, createWhatsAppUrl } from '../data/companyInfo';
+import { ReyfluxLogo } from './ReyfluxLogo';
 
 interface FooterProps {
   onOpenFlyer: () => void;
@@ -8,25 +9,16 @@ interface FooterProps {
 
 export const Footer: React.FC<FooterProps> = ({ onOpenFlyer }) => {
   return (
-    <footer className="bg-slate-950 text-slate-400 border-t border-slate-800 text-xs sm:text-sm w-full">
-      <div className="w-full px-4 sm:px-8 lg:px-12 py-12 space-y-10">
+    <footer className="bg-slate-950 text-slate-400 border-t border-slate-800 text-xs">
+      <div className="w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           
           {/* Col 1: Brand Info */}
-          <div className="space-y-3">
-            <div className="flex items-center gap-2">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500 via-orange-600 to-red-600 p-0.5">
-                <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center font-extrabold text-amber-500">
-                  R
-                </div>
-              </div>
-              <span className="font-black text-white text-base tracking-tight">
-                REYFLUX ENTERPRISES
-              </span>
-            </div>
+          <div className="space-y-4">
+            <ReyfluxLogo size="md" showTagline={true} />
             <p className="text-slate-400 leading-relaxed">
-              "{COMPANY_INFO.tagline}" Pure unadulterated red palm oil, fresh Garri, Cassava flour, and instant POS agency services in Suleja, Niger State.
+              "{COMPANY_INFO.tagline}" Pure unadulterated red Palm Oil, fresh Garri, Cassava Flour, Plantain Flour, Amala Flour, and Groundnut in Suleja, Niger State.
             </p>
             <div className="flex items-center gap-2 text-emerald-400 font-bold">
               <ShieldCheck className="w-4 h-4" />
@@ -36,16 +28,16 @@ export const Footer: React.FC<FooterProps> = ({ onOpenFlyer }) => {
 
           {/* Col 2: Quick Links */}
           <div className="space-y-3">
-            <h4 className="font-bold text-white text-sm uppercase tracking-wider">Quick Navigation</h4>
+            <h4 className="font-bold text-white text-sm uppercase tracking-wider">Our Food Products</h4>
             <ul className="space-y-2">
               <li>
                 <a href="#products" className="hover:text-amber-400 transition-colors">
-                  Pure Organic Palm Oil Catalog
+                  Pure Organic Palm Oil (4L - 50L)
                 </a>
               </li>
               <li>
                 <a href="#products" className="hover:text-amber-400 transition-colors">
-                  Fresh Yellow Garri & White Ijebu Garri
+                  Fresh Yellow & White Ijebu Garri
                 </a>
               </li>
               <li>
@@ -54,13 +46,18 @@ export const Footer: React.FC<FooterProps> = ({ onOpenFlyer }) => {
                 </a>
               </li>
               <li>
-                <a href="#pos-services" className="hover:text-amber-400 transition-colors">
-                  POS Cash Withdrawal & Transfer Rates
+                <a href="#products" className="hover:text-amber-400 transition-colors">
+                  Pure Plantain Flour
                 </a>
               </li>
               <li>
-                <a href="#wholesale" className="hover:text-amber-400 transition-colors">
-                  Wholesale Commercial B2B Supply
+                <a href="#products" className="hover:text-amber-400 transition-colors">
+                  Traditional Amala Yam Flour
+                </a>
+              </li>
+              <li>
+                <a href="#products" className="hover:text-amber-400 transition-colors">
+                  Crispy & Raw Shelled Groundnut
                 </a>
               </li>
             </ul>

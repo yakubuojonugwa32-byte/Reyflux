@@ -1,7 +1,7 @@
 export interface Product {
   id: string;
   name: string;
-  category: 'palm_oil' | 'garri' | 'cassava_flour' | 'bulk_wholesale';
+  category: 'palm_oil' | 'garri' | 'cassava_flour' | 'plantain_flour' | 'amala_flour' | 'groundnut' | 'bulk_wholesale';
   price: number; // Current discounted price in NGN
   originalPrice: number; // Strikethrough price in NGN
   unit: string;
@@ -9,7 +9,7 @@ export interface Product {
   description: string;
   isPopular?: boolean;
   isFlashSale?: boolean;
-  claimedPercentage?: number; // e.g. 84 for 84% claimed
+  claimedPercentage?: number;
   isOrganic: boolean;
   noPreservatives: boolean;
   noColours: boolean;
@@ -22,6 +22,7 @@ export interface Product {
 }
 
 export const PRODUCTS: Product[] = [
+  // 1. PALM OIL
   {
     id: 'palm-oil-4l',
     name: 'Pure Organic Palm Oil - 4 Litres Jerrycan',
@@ -40,7 +41,7 @@ export const PRODUCTS: Product[] = [
     stockCount: 45,
     rating: 4.9,
     reviewsCount: 128,
-    image: 'https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&w=800&q=80',
     badgeText: 'Lowest Price in 30 Days',
     uses: ['Soup & Stew Preparation', 'Local Delicacies', 'Traditional Cooking', 'Bakery & Food Processing']
   },
@@ -62,7 +63,7 @@ export const PRODUCTS: Product[] = [
     stockCount: 30,
     rating: 5.0,
     reviewsCount: 94,
-    image: 'https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?auto=format&fit=crop&w=800&q=80',
     badgeText: 'Save ₦8,000 Today',
     uses: ['Restaurants & Caterers', 'Family Monthly Stock', 'Confectionery']
   },
@@ -103,10 +104,12 @@ export const PRODUCTS: Product[] = [
     stockCount: 12,
     rating: 5.0,
     reviewsCount: 42,
-    image: 'https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80',
     badgeText: 'Wholesale Super Deal',
     uses: ['Industrial Catering', 'Institutional Kitchens', 'Export & Bulk Distribution']
   },
+
+  // 2. GARRI
   {
     id: 'garri-yellow-5kg',
     name: 'Fresh Premium Yellow Garri - 5kg Bag',
@@ -125,28 +128,9 @@ export const PRODUCTS: Product[] = [
     stockCount: 60,
     rating: 4.8,
     reviewsCount: 164,
-    image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1599307767316-77526679b3ec?auto=format&fit=crop&w=800&q=80',
     badgeText: '21% Price Drop',
     uses: ['Eba Swallow', 'Garri Soaking & Snacks', 'Household Meals']
-  },
-  {
-    id: 'garri-yellow-10kg',
-    name: 'Fresh Premium Yellow Garri - 10kg Bag',
-    category: 'garri',
-    price: 14500,
-    originalPrice: 18000,
-    unit: 'Bag',
-    volumeOrWeight: '10 kg',
-    description: 'A 10kg sack of crispy yellow garri fried with organic palm oil. Clean, stone-free, and well sifted.',
-    isOrganic: true,
-    noPreservatives: true,
-    noColours: true,
-    stockCount: 40,
-    rating: 4.9,
-    reviewsCount: 89,
-    image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=800&q=80',
-    badgeText: 'Save ₦3,500',
-    uses: ['Family Swallow', 'Boarding School Snack']
   },
   {
     id: 'garri-yellow-25kg',
@@ -171,25 +155,6 @@ export const PRODUCTS: Product[] = [
     uses: ['Boarding Schools', 'Large Families', 'Restaurants']
   },
   {
-    id: 'garri-yellow-50kg',
-    name: 'Fresh Premium Yellow Garri - 50kg Sack',
-    category: 'garri',
-    price: 66000,
-    originalPrice: 78000,
-    unit: 'Sack',
-    volumeOrWeight: '50 kg',
-    description: 'Wholesale 50kg sack directly from processing mill. Clean, dry, sour-tang balance that tastes homemade.',
-    isOrganic: true,
-    noPreservatives: true,
-    noColours: true,
-    stockCount: 15,
-    rating: 5.0,
-    reviewsCount: 51,
-    image: '/assets/aistudio/image_6b1c0bf2.png',
-    badgeText: 'Flyer Featured Item',
-    uses: ['Retail Reseller Supply', 'Food Vendors', 'Bulk Storage']
-  },
-  {
     id: 'garri-white-ijebu-25kg',
     name: 'Crispy White Ijebu Garri - 25kg Bag',
     category: 'garri',
@@ -207,10 +172,12 @@ export const PRODUCTS: Product[] = [
     stockCount: 22,
     rating: 4.9,
     reviewsCount: 110,
-    image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=800&q=80',
     badgeText: 'Extra Sour & Crunchy',
     uses: ['Cold Soaking Snack', 'Fine Eba', 'Student Favorite']
   },
+
+  // 3. CASSAVA FLOUR
   {
     id: 'cassava-flour-10kg',
     name: 'High Quality Cassava Flour (HQCF) - 10kg Bag',
@@ -231,25 +198,6 @@ export const PRODUCTS: Product[] = [
     uses: ['Gluten-Free Baking', 'Fufu & Amala Blend', 'Industrial Food Binding']
   },
   {
-    id: 'cassava-flour-25kg',
-    name: 'High Quality Cassava Flour (HQCF) - 25kg Bag',
-    category: 'cassava_flour',
-    price: 29500,
-    originalPrice: 35000,
-    unit: 'Bag',
-    volumeOrWeight: '25 kg',
-    description: 'Smooth white cassava flour for gluten-free baking, pastries, and traditional smooth swallow.',
-    isOrganic: true,
-    noPreservatives: true,
-    noColours: true,
-    stockCount: 28,
-    rating: 4.9,
-    reviewsCount: 62,
-    image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=800&q=80',
-    badgeText: 'Gluten-Free Choice',
-    uses: ['Pastry Making', 'Swallow Prep', 'Baking Substitute']
-  },
-  {
     id: 'cassava-flour-50kg',
     name: 'High Quality Cassava Flour (HQCF) - 50kg Industrial Sack',
     category: 'cassava_flour',
@@ -264,19 +212,150 @@ export const PRODUCTS: Product[] = [
     stockCount: 18,
     rating: 4.9,
     reviewsCount: 45,
-    image: '/assets/aistudio/image_6b1c0bf2.png',
+    image: 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&w=800&q=80',
     badgeText: 'Bakery Grade • Save ₦11,000',
     uses: ['Commercial Bakeries', 'Biscuit & Pastry Processing', 'Industrial Starch Source']
   },
+
+  // 4. PLANTAIN FLOUR
+  {
+    id: 'plantain-flour-5kg',
+    name: 'Pure Plantain Flour - 5kg Bag',
+    category: 'plantain_flour',
+    price: 8500,
+    originalPrice: 10500,
+    unit: 'Bag',
+    volumeOrWeight: '5 kg',
+    description: '100% pure plantain flour. Rich in dietary fiber, low glycemic index, perfect for healthy swallows and diabetic-friendly diets.',
+    isPopular: true,
+    isFlashSale: true,
+    claimedPercentage: 79,
+    isOrganic: true,
+    noPreservatives: true,
+    noColours: true,
+    stockCount: 40,
+    rating: 4.9,
+    reviewsCount: 112,
+    image: 'https://images.unsplash.com/photo-1528825871115-3581a5387919?auto=format&fit=crop&w=800&q=80',
+    badgeText: 'Diabetic Friendly • 19% OFF',
+    uses: ['Healthy Plantain Amala', 'Low Glycemic Meals', 'Gluten-Free Fitness Diet']
+  },
+  {
+    id: 'plantain-flour-25kg',
+    name: 'Pure Plantain Flour - 25kg Sack',
+    category: 'plantain_flour',
+    price: 39000,
+    originalPrice: 47000,
+    unit: 'Sack',
+    volumeOrWeight: '25 kg',
+    description: 'Bulk 25kg sack of sun-dried unadulterated plantain flour. Clean, grit-free, smooth texture when prepared.',
+    isOrganic: true,
+    noPreservatives: true,
+    noColours: true,
+    stockCount: 20,
+    rating: 5.0,
+    reviewsCount: 64,
+    image: 'https://images.unsplash.com/photo-1603569283847-be29b8e3bf1d?auto=format&fit=crop&w=800&q=80',
+    badgeText: 'Save ₦8,000 Bulk Sack',
+    uses: ['Health Food Catering', 'Family Monthly Diet', 'Hospital & Wellness Meals']
+  },
+
+  // 5. AMALA FLOUR
+  {
+    id: 'amala-flour-5kg',
+    name: 'Premium Amala Yam Flour (Amala Isu) - 5kg Bag',
+    category: 'amala_flour',
+    price: 9000,
+    originalPrice: 11500,
+    unit: 'Bag',
+    volumeOrWeight: '5 kg',
+    description: 'Authentic dried yam tuber flour (Amala). Smooth, stretchy texture that pairs wonderfully with Ewedu, Gbegiri, and Ogbono soups.',
+    isPopular: true,
+    isFlashSale: true,
+    claimedPercentage: 91,
+    isOrganic: true,
+    noPreservatives: true,
+    noColours: true,
+    stockCount: 35,
+    rating: 4.9,
+    reviewsCount: 140,
+    image: 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=800&q=80',
+    badgeText: '21% Price Drop • Stretchy & Smooth',
+    uses: ['Amala & Ewedu Swallow', 'Restaurant Buka Style', 'Traditional Feasts']
+  },
+  {
+    id: 'amala-flour-25kg',
+    name: 'Premium Amala Yam Flour - 25kg Bulk Bag',
+    category: 'amala_flour',
+    price: 42000,
+    originalPrice: 50000,
+    unit: 'Bag',
+    volumeOrWeight: '25 kg',
+    description: 'Bulk restaurant size 25kg bag of traditional dried yam flour. Well dried to prevent mold and preserve authentic earthy aroma.',
+    isOrganic: true,
+    noPreservatives: true,
+    noColours: true,
+    stockCount: 18,
+    rating: 5.0,
+    reviewsCount: 82,
+    image: 'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?auto=format&fit=crop&w=800&q=80',
+    badgeText: 'Buka Special • Save ₦8,000',
+    uses: ['Buka Eateries', 'Event Catering', 'Large Household Swallow']
+  },
+
+  // 6. GROUNDNUT
+  {
+    id: 'groundnut-2kg',
+    name: 'Crunchy Hand-Picked Groundnut - 2kg Jar',
+    category: 'groundnut',
+    price: 4500,
+    originalPrice: 5800,
+    unit: 'Jar',
+    volumeOrWeight: '2 kg',
+    description: 'Fresh, crispy, lightly salted hand-picked groundnut. Perfect snack paired with cold Garri, bread, or plantain chips.',
+    isPopular: true,
+    isFlashSale: true,
+    claimedPercentage: 87,
+    isOrganic: true,
+    noPreservatives: true,
+    noColours: true,
+    stockCount: 50,
+    rating: 4.9,
+    reviewsCount: 175,
+    image: 'https://images.unsplash.com/photo-1567892330456-78e7aa96aa70?auto=format&fit=crop&w=800&q=80',
+    badgeText: 'Extra Crunchy • Garri Companion',
+    uses: ['Garri Soaking Companion', 'Snacking', 'Baking & Confectionery']
+  },
+  {
+    id: 'groundnut-raw-10kg',
+    name: 'Raw Shelled Premium Groundnut Seeds - 10kg Bag',
+    category: 'groundnut',
+    price: 21000,
+    originalPrice: 26000,
+    unit: 'Bag',
+    volumeOrWeight: '10 kg',
+    description: 'Clean, stone-free raw peeled groundnut seeds direct from northern farms. Ideal for peanut butter production, home prep, and cooking.',
+    isOrganic: true,
+    noPreservatives: true,
+    noColours: true,
+    stockCount: 25,
+    rating: 4.8,
+    reviewsCount: 58,
+    image: 'https://images.unsplash.com/photo-1536591375315-1b83689e377a?auto=format&fit=crop&w=800&q=80',
+    badgeText: 'Raw Farm Fresh • Save ₦5,000',
+    uses: ['Peanut Butter & Kulikuli', 'Cooking Oil Processing', 'Home Preparation']
+  },
+
+  // 7. BULK COMBOS
   {
     id: 'bulk-combo-starter',
-    name: 'Reyflux Kitchen Combo Pack (Palm Oil 4L + Yellow Garri 10kg)',
+    name: 'Reyflux Kitchen Combo Pack (Palm Oil 4L + Yellow Garri 10kg + Groundnut 2kg)',
     category: 'bulk_wholesale',
-    price: 27500,
-    originalPrice: 34000,
+    price: 29500,
+    originalPrice: 36000,
     unit: 'Combo Pack',
-    volumeOrWeight: '4L Oil + 10kg Garri',
-    description: 'Bundled savings pack containing 4L pure red palm oil and 10kg fresh yellow garri. Includes free Suleja doorstep delivery.',
+    volumeOrWeight: '4L Oil + 10kg Garri + 2kg Groundnut',
+    description: 'Bundled household savings pack containing 4L pure red palm oil, 10kg fresh yellow garri, and 2kg crunchy groundnut.',
     isPopular: true,
     isFlashSale: true,
     claimedPercentage: 95,
@@ -286,30 +365,30 @@ export const PRODUCTS: Product[] = [
     stockCount: 40,
     rating: 5.0,
     reviewsCount: 189,
-    image: '/assets/aistudio/image_6b1c0bf2.png',
+    image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=800&q=80',
     badgeText: 'Super Bundle • Save ₦6,500',
     uses: ['Monthly Household Replenishment', 'Gifting & Food Parcels']
   },
   {
-    id: 'bulk-combo-commercial',
-    name: 'Commercial Kitchen Starter Pack (Palm Oil 25L + Yellow Garri 50kg)',
+    id: 'bulk-combo-flours',
+    name: 'Flour Trio Bundle (Plantain Flour 5kg + Amala Flour 5kg + Cassava Flour 10kg)',
     category: 'bulk_wholesale',
-    price: 142000,
-    originalPrice: 170000,
-    unit: 'Commercial Bundle',
-    volumeOrWeight: '25L Oil + 50kg Garri',
-    description: 'Complete catering and restaurant restock bundle with 25L pure red palm oil and a 50kg sack of crispy yellow garri.',
+    price: 28000,
+    originalPrice: 34500,
+    unit: 'Flour Bundle',
+    volumeOrWeight: '5kg Plantain + 5kg Amala + 10kg Cassava',
+    description: 'Complete healthy flour bundle for diverse dietary swallows and gluten-free baking.',
     isPopular: true,
     isFlashSale: true,
     claimedPercentage: 89,
     isOrganic: true,
     noPreservatives: true,
     noColours: true,
-    stockCount: 15,
+    stockCount: 20,
     rating: 5.0,
-    reviewsCount: 97,
-    image: '/assets/aistudio/image_6b1c0bf2.png',
-    badgeText: 'Commercial Tier • Save ₦28,000',
-    uses: ['Catering Services', 'Hotels & Eateries', 'Boarding School Kitchens']
+    reviewsCount: 94,
+    image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=800&q=80',
+    badgeText: 'Healthy Diet Pack • Save ₦6,500',
+    uses: ['Healthy Swallow Variety', 'Fitness & Diabetic Diet']
   }
 ];

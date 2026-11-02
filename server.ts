@@ -63,9 +63,31 @@ app.get('/api/products/infinite', (req, res) => {
 
 // 2. REAL-TIME AI RECOMMENDATION ENGINE ENDPOINT
 app.post('/api/recommendations', async (req, res) => {
-  try {
-    const { viewedProductIds = [], categoryAffinities = {}, recentSearch = '' } = req.body;
+  const { viewedProductIds = [], categoryAffinities = {}, recentSearch = '' } = req.body;
 
+  const generateFallbackRecommendations = () => {
+    const sortedCategories = Object.entries(categoryAffinities)
+      .sort((a, b) => (b[1] as number) - (a[1] as number))
+      .map(([cat]) => cat);
+
+    const primaryCat = sortedCategories[0] || 'palm_oil';
+    const categoryPicks = PRODUCTS.filter((p) => p.category === primaryCat);
+    const nonViewed = PRODUCTS.filter((p) => !viewedProductIds.includes(p.id));
+
+    const combined = Array.from(new Set([...categoryPicks, ...nonViewed, ...PRODUCTS]));
+    const selected = combined.slice(0, 4);
+
+    return selected.map((p) => ({
+      ...p,
+      aiReason: p.category === primaryCat
+        ? `Top Pick in Organic Foodstuffs`
+        : p.isPopular
+        ? 'Top Seller in Suleja'
+        : 'Recommended for Your Kitchen'
+    }));
+  };
+
+  try {
     const catalogSummary = PRODUCTS.map((p) => ({
       id: p.id,
       name: p.name,
@@ -74,16 +96,16 @@ app.post('/api/recommendations', async (req, res) => {
       volumeOrWeight: p.volumeOrWeight
     }));
 
-    const prompt = `Analyze this user session data for Reyflux Enterprises Limited:
+    const prompt = `Analyze session data for Reyflux Enterprises Limited:
 - Recently Viewed Product IDs: ${JSON.stringify(viewedProductIds)}
-- Category Affinities (click counts): ${JSON.stringify(categoryAffinities)}
+- Category Affinities: ${JSON.stringify(categoryAffinities)}
 - Recent Search Query: "${recentSearch}"
 
 Product Catalog:
 ${JSON.stringify(catalogSummary)}
 
-Pick EXACTLY 4 product IDs that best suit this user's browsing preferences.
-For each product, provide a short 3-6 word personalized recommendation reason (e.g. "Pairs with your Palm Oil view", "Popular in Garri category", "Best value for cooking").
+Pick EXACTLY 4 product IDs that best suit this user's browsing preferences from our 6 main product categories (Palm Oil, Garri, Cassava Flour, Plantain Flour, Amala Flour, Groundnut).
+For each product, provide a short 3-6 word personalized recommendation reason (e.g. "Pairs with your Palm Oil view", "Popular in Plantain Flour").
 
 Return valid JSON in this structure:
 {
@@ -107,18 +129,13 @@ Return valid JSON in this structure:
     try {
       resultJson = JSON.parse(response.text || '{}');
     } catch (e) {
-      console.warn('Failed to parse AI recommendation JSON, using fallback logic', e);
+      // Parse catch
     }
 
     let recommendedIds: Array<{ id: string; reason: string }> = resultJson.recommendations || [];
 
-    // Fallback if AI returned fewer than 4 or invalid IDs
     if (!recommendedIds || recommendedIds.length < 4) {
-      const topPopular = PRODUCTS.filter((p) => !viewedProductIds.includes(p.id)).slice(0, 4);
-      recommendedIds = topPopular.map((p) => ({
-        id: p.id,
-        reason: p.isPopular ? 'Top Seller in Suleja' : 'Recommended for You'
-      }));
+      return res.json({ recommendations: generateFallbackRecommendations() });
     }
 
     const recommendedProducts = recommendedIds.map((rec) => {
@@ -131,13 +148,7 @@ Return valid JSON in this structure:
 
     res.json({ recommendations: recommendedProducts });
   } catch (err: any) {
-    console.error('AI Recommendations Error:', err);
-    // Fallback response
-    const fallback = PRODUCTS.slice(0, 4).map((p) => ({
-      ...p,
-      aiReason: 'Top Recommended for Kitchens'
-    }));
-    res.json({ recommendations: fallback });
+    res.json({ recommendations: generateFallbackRecommendations() });
   }
 });
 
@@ -153,22 +164,28 @@ app.post('/api/chat', async (req, res) => {
 Location: Second Gate by Yaro College Road, Adjacent Alheri Plaza, Suleja, Niger State.
 Primary WhatsApp / Phone: 09064153934, 07068581710.
 
-Main Products Sold:
+Main Products Sold (WE ONLY SELL FOODSTUFFS - NO POS):
 1. PURE ORGANIC PALM OIL (100% Natural, No Preservatives, No Added Colours)
-   - Sizes: 4 Litres (₦14,500), 10 Litres (₦34,000), 25 Litres (₦82,000), 50 Litres Drum (₦160,000). Direct mill processed.
+   - 4 Litres (₦14,500), 10 Litres (₦34,000), 25 Litres (₦82,000), 50 Litres Drum (₦160,000). Direct mill processed.
 2. CRISPY GARRI
    - Fresh Yellow Garri (5kg ₦7,500, 10kg ₦14,500, 25kg ₦34,000, 50kg ₦66,000).
    - Extra Sour White Ijebu Garri (25kg ₦38,000).
 3. HIGH QUALITY CASSAVA FLOUR (HQCF)
-   - Odorless, white gluten-free flour (10kg ₦12,500, 50kg ₦57,000) for swallow and gluten-free baking.
-4. POS FINANCIAL AGENCY
-   - Instant cash withdrawal, bank transfers, electricity bill token payments (AEDC), cable TV.
-5. DOORSTEP DELIVERY
-   - Delivery to any location in Suleja, Minna, Abuja FCT, and nationwide.
+   - Odorless white gluten-free flour (10kg ₦12,500, 50kg ₦57,000) for swallow & gluten-free baking.
+4. PLANTAIN FLOUR
+   - 100% plantain flour (5kg ₦8,500, 25kg ₦39,000). Low glycemic index, perfect for health-conscious and diabetic diets.
+5. AMALA YAM FLOUR
+   - Traditional dried yam flour (5kg ₦9,000, 25kg ₦42,000). Smooth and stretchy for Ewedu & Gbegiri soups.
+6. GROUNDNUT
+   - Crunchy groundnut (2kg ₦4,500) & Raw shelled groundnut seeds (10kg ₦21,000).
+
+DOORSTEP DELIVERY:
+- Fast delivery to any location in Suleja, Minna, Abuja FCT, and nationwide.
 
 Guidelines:
 - Maintain a warm, friendly, helpful Nigerian business tone.
-- Answer questions about prices, storage tips, recipe ideas, bulk orders, and delivery fees.
+- Focus strictly on these 6 food products (Palm oil, Garri, Cassava flour, Plantain flour, Amala flour, Groundnut).
+- Answer questions about prices, recipe ideas, storage tips, health benefits, and bulk orders.
 - Always include helpful call-to-actions, encouraging the user to click the WhatsApp button or call 09064153934 / 07068581710 to confirm their order.
 - Keep responses readable, succinct (1-3 paragraphs), and enthusiastic!`;
 
@@ -185,12 +202,20 @@ Guidelines:
       }
     });
 
-    res.json({ reply: response.text || 'I am here to assist with Garri, Palm Oil, Cassava Flour, and POS services!' });
+    res.json({ reply: response.text || 'I am here to assist with Palm Oil, Garri, Cassava Flour, Plantain Flour, Amala Flour, and Groundnut orders!' });
   } catch (err: any) {
-    console.error('Server AI Chat Error:', err);
-    res.status(500).json({
-      error: 'Sorry, I am having trouble connecting to Reyflux AI. Please call 09064153934 directly!'
-    });
+    const lastMsg = (req.body?.messages?.slice(-1)[0]?.content || '').toLowerCase();
+
+    let reply = `Welcome to Reyflux Enterprises Limited! 👋\n\n`;
+    if (lastMsg.includes('price') || lastMsg.includes('cost') || lastMsg.includes('how much')) {
+      reply += `Here are our current direct-from-mill prices:\n- **Pure Organic Palm Oil**: 4L (₦14,500), 10L (₦34,000), 25L (₦82,000)\n- **Crispy Yellow Garri**: 5kg (₦7,500), 10kg (₦14,500), 25kg (₦34,000), 50kg (₦66,000)\n- **High Quality Cassava Flour**: 10kg (₦12,500), 50kg (₦57,000)\n- **Plantain Flour**: 5kg (₦8,500), 25kg (₦39,000)\n- **Amala Yam Flour**: 5kg (₦9,000), 25kg (₦42,000)\n- **Groundnut**: 2kg Jar (₦4,500), 10kg Raw (₦21,000)\n\nAll products are 100% natural with zero preservatives!`;
+    } else if (lastMsg.includes('address') || lastMsg.includes('location') || lastMsg.includes('where')) {
+      reply += `📍 **Store Address**: Second Gate by Yaro College Road, Adjacent Alheri Plaza, Suleja, Niger State.\n\nWe offer fast doorstep delivery across Suleja, Minna, Abuja FCT, and nationwide!`;
+    } else {
+      reply += `I am here to assist you with fresh Yellow & White Garri, Pure Organic Palm Oil, High Quality Cassava Flour, Plantain Flour, Amala Flour, and Groundnut in Suleja.\n\nFor instant order placement or waybill delivery, click the WhatsApp button or call us directly at **09064153934** or **07068581710**!`;
+    }
+
+    res.json({ reply });
   }
 });
 

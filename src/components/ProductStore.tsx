@@ -61,20 +61,20 @@ export const ProductStore: React.FC<ProductStoreProps> = ({
   const estimatedGarriCost = calcGarriKg * 1360;
 
   return (
-    <section id="products" className="py-16 bg-slate-50/50 dark:bg-slate-900/50 border-t border-amber-200/50 dark:border-slate-800 space-y-12 w-full">
-      <div className="w-full px-4 sm:px-8 lg:px-12 space-y-10">
+    <section id="products" className="py-8 sm:py-10 bg-slate-50/50 dark:bg-slate-900/50 border-t border-amber-200/50 dark:border-slate-800 space-y-8">
+      <div className="w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         
         {/* Section Header */}
-        <div className="text-center max-w-4xl mx-auto space-y-3">
+        <div className="text-center max-w-3xl mx-auto space-y-3">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 dark:bg-amber-950/80 border border-amber-300 dark:border-amber-800 text-amber-900 dark:text-amber-300 text-xs font-bold uppercase tracking-wider">
             <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-            <span>Guaranteed Direct Supply</span>
+            <span>Guaranteed Direct Mill Supply</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             Organic Foodstuffs Discovery Feed
           </h2>
-          <p className="text-sm sm:text-base lg:text-lg text-slate-600 dark:text-slate-400">
-            Fresh unadulterated red palm oil, crispy fried Garri, and High Quality Cassava Flour. 100% Natural, zero preservatives, direct from primary mill to your doorstep.
+          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400">
+            Fresh unadulterated red Palm Oil, crispy fried Garri, Cassava Flour, Plantain Flour, Amala Flour, and Groundnut. 100% Natural, direct to your doorstep.
           </p>
         </div>
 
@@ -96,16 +96,16 @@ export const ProductStore: React.FC<ProductStoreProps> = ({
 
         {/* Interactive Volume Quick Calculator Bar */}
         <div className="bg-gradient-to-br from-amber-500/10 via-orange-500/5 to-amber-500/10 dark:from-amber-950/40 dark:to-slate-900 p-6 sm:p-8 rounded-2xl border border-amber-300/60 dark:border-amber-900/50 space-y-4">
-          <div className="flex items-center gap-2 text-amber-900 dark:text-amber-300 font-bold text-base sm:text-lg">
+          <div className="flex items-center gap-2 text-amber-900 dark:text-amber-300 font-bold text-base">
             <Calculator className="w-5 h-5 text-amber-600" />
             <h3>Interactive Order Estimator</h3>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-amber-200 dark:border-slate-800 space-y-3 shadow-sm">
-              <div className="flex justify-between items-center text-xs sm:text-sm font-bold">
+            <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-amber-200 dark:border-slate-800 space-y-3 shadow-sm">
+              <div className="flex justify-between items-center text-xs font-bold">
                 <span className="text-slate-800 dark:text-slate-200">Palm Oil Needed (Litres):</span>
-                <span className="text-amber-600 font-mono text-base font-extrabold">{calcLiters} Litres</span>
+                <span className="text-amber-600 font-mono text-sm font-extrabold">{calcLiters} Litres</span>
               </div>
               <input
                 type="range"
@@ -116,18 +116,18 @@ export const ProductStore: React.FC<ProductStoreProps> = ({
                 onChange={(e) => setCalcLiters(Number(e.target.value))}
                 className="w-full accent-amber-600 cursor-pointer"
               />
-              <div className="flex justify-between items-center pt-2 border-t border-slate-100 dark:border-slate-800 text-xs sm:text-sm">
+              <div className="flex justify-between items-center pt-1 border-t border-slate-100 dark:border-slate-800 text-xs">
                 <span className="text-slate-500">Estimated Cost:</span>
-                <span className="font-extrabold text-slate-900 dark:text-white font-mono text-base">
+                <span className="font-extrabold text-slate-900 dark:text-white font-mono text-sm">
                   ₦{estimatedPalmOilCost.toLocaleString()}
                 </span>
               </div>
             </div>
 
-            <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-amber-200 dark:border-slate-800 space-y-3 shadow-sm">
-              <div className="flex justify-between items-center text-xs sm:text-sm font-bold">
+            <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-amber-200 dark:border-slate-800 space-y-3 shadow-sm">
+              <div className="flex justify-between items-center text-xs font-bold">
                 <span className="text-slate-800 dark:text-slate-200">Garri Needed (Kg):</span>
-                <span className="text-amber-600 font-mono text-base font-extrabold">{calcGarriKg} kg</span>
+                <span className="text-amber-600 font-mono text-sm font-extrabold">{calcGarriKg} kg</span>
               </div>
               <input
                 type="range"
@@ -138,9 +138,9 @@ export const ProductStore: React.FC<ProductStoreProps> = ({
                 onChange={(e) => setCalcGarriKg(Number(e.target.value))}
                 className="w-full accent-amber-600 cursor-pointer"
               />
-              <div className="flex justify-between items-center pt-2 border-t border-slate-100 dark:border-slate-800 text-xs sm:text-sm">
+              <div className="flex justify-between items-center pt-1 border-t border-slate-100 dark:border-slate-800 text-xs">
                 <span className="text-slate-500">Estimated Cost:</span>
-                <span className="font-extrabold text-slate-900 dark:text-white font-mono text-base">
+                <span className="font-extrabold text-slate-900 dark:text-white font-mono text-sm">
                   ₦{estimatedGarriCost.toLocaleString()}
                 </span>
               </div>

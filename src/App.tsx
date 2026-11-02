@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
 import { ProductStore } from './components/ProductStore';
-import { PosServicesHub } from './components/PosServicesHub';
 import { DeliveryEstimator } from './components/DeliveryEstimator';
 import { WholesaleCalculator } from './components/WholesaleCalculator';
 import { LocationAndContact } from './components/LocationAndContact';
@@ -12,7 +11,7 @@ import { AdminDashboard } from './components/AdminDashboard';
 import { LiveAiChatDrawer } from './components/LiveAiChatDrawer';
 import { Footer } from './components/Footer';
 import { Product } from './data/products';
-import { Bot, Phone, MessageSquare } from 'lucide-react';
+import { Bot, Phone } from 'lucide-react';
 import { COMPANY_INFO, createWhatsAppUrl } from './data/companyInfo';
 
 export default function App() {
@@ -109,9 +108,6 @@ export default function App() {
           onSelectCategory={setSelectedCategory}
         />
 
-        {/* POS Agency Services & Cash Rate Calculator */}
-        <PosServicesHub />
-
         {/* Nationwide Doorstep Delivery & Live Tracker */}
         <DeliveryEstimator />
 
@@ -128,7 +124,7 @@ export default function App() {
         
         {/* Floating WhatsApp Quick Button */}
         <a
-          href={createWhatsAppUrl("Hello Reyflux Enterprises, I am reaching out to order Garri, Palm Oil, Cassava Flour or ask about POS.")}
+          href={createWhatsAppUrl("Hello Reyflux Enterprises, I am reaching out to order Palm Oil, Garri, Cassava Flour, Plantain Flour, Amala Flour, or Groundnut.")}
           target="_blank"
           rel="noopener noreferrer"
           className="group flex items-center gap-2 p-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs rounded-full shadow-2xl transition-all transform hover:scale-105"

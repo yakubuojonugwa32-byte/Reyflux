@@ -28,7 +28,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   const [deliveryLocation, setDeliveryLocation] = useState('Suleja Central');
   const [customerName, setCustomerName] = useState('');
   const [customerPhone, setCustomerPhone] = useState('');
-  const [paymentChoice, setPaymentChoice] = useState<'cod' | 'pos_doorstep' | 'transfer'>('pos_doorstep');
+  const [paymentChoice, setPaymentChoice] = useState<'cod' | 'transfer' | 'card'>('cod');
 
   if (!isOpen) return null;
 
@@ -37,7 +37,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   const grandTotal = subtotal + (cartItems.length > 0 ? deliveryFee : 0);
 
   const buildWhatsAppOrderMessage = () => {
-    let msg = `Hello Reyflux Enterprises Limited, I want to place an official order from your website:\n\n`;
+    let msg = `Hello Reyflux Enterprises Limited, I want to place an official foodstuffs order from your website:\n\n`;
     msg += `👤 Customer: ${customerName || 'Customer'}\n`;
     msg += `📞 Phone: ${customerPhone || COMPANY_INFO.phones[0]}\n`;
     msg += `📍 Delivery Location: ${deliveryLocation}\n`;
@@ -87,7 +87,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               </div>
               <h3 className="font-extrabold text-slate-900 dark:text-white text-base">Your cart is currently empty</h3>
               <p className="text-xs text-slate-500 max-w-xs mx-auto">
-                Select pure red palm oil, fresh Garri bags, or Cassava flour from our catalog to build your order.
+                Select pure red palm oil, fresh Garri bags, Plantain flour, Amala flour, Cassava flour, or Groundnut from our catalog to build your order.
               </p>
               <button
                 onClick={onClose}
@@ -195,9 +195,9 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300">Payment Preference:</label>
                   <div className="grid grid-cols-3 gap-1.5 text-[10px] font-bold">
                     {[
-                      { id: 'pos_doorstep', label: 'POS at Doorstep' },
                       { id: 'cod', label: 'Cash on Delivery' },
-                      { id: 'transfer', label: 'Bank Transfer' }
+                      { id: 'transfer', label: 'Bank Transfer' },
+                      { id: 'card', label: 'Card Payment' }
                     ].map((opt) => (
                       <button
                         key={opt.id}

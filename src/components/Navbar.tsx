@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ShoppingBag, Phone, Sparkles, Image as ImageIcon, MapPin, Moon, Sun, Menu, X, ShieldCheck, Bot, MessageSquare } from 'lucide-react';
 import { COMPANY_INFO, createWhatsAppUrl } from '../data/companyInfo';
+import { ReyfluxLogo } from './ReyfluxLogo';
 
 interface NavbarProps {
   cartCount: number;
@@ -26,36 +27,22 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-amber-200/60 dark:border-slate-800 transition-colors w-full">
-      <div className="w-full px-4 sm:px-8 lg:px-12">
+    <header className="sticky top-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-amber-200/60 dark:border-slate-800 transition-colors">
+      <div className="w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20 gap-8">
           
-          {/* Zone 1: Brand Wordmark */}
-          <a href="#" className="flex items-center gap-3 shrink-0 group">
-            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-amber-500 via-orange-600 to-red-600 p-0.5 shadow-md shadow-orange-500/20 group-hover:scale-105 transition-transform">
-              <div className="w-full h-full bg-white dark:bg-slate-900 rounded-[10px] flex items-center justify-center overflow-hidden">
-                <span className="font-extrabold text-xl bg-gradient-to-br from-amber-600 to-red-600 bg-clip-text text-transparent">
-                  R
-                </span>
-              </div>
-            </div>
-            <div className="flex flex-col">
-              <span className="text-lg font-black tracking-tight text-slate-900 dark:text-white leading-tight">
-                REYFLUX
-              </span>
-              <span className="text-[10px] font-bold tracking-widest text-amber-700 dark:text-amber-400 uppercase">
-                ENTERPRISES LIMITED
-              </span>
-            </div>
+          {/* Zone 1: Brand Logo */}
+          <a href="#" className="flex items-center shrink-0 group hover:opacity-95 transition-opacity">
+            <ReyfluxLogo size="md" showTagline={true} />
           </a>
 
           {/* Zone 2: Navigation Links */}
           <nav className="hidden lg:flex items-center gap-6 text-sm font-semibold text-slate-700 dark:text-slate-300">
             <a href="#products" className="hover:text-amber-600 dark:hover:text-amber-400 transition-colors whitespace-nowrap shrink-0">
-              Garri, Palm Oil & Flour
+              Garri & Palm Oil
             </a>
-            <a href="#pos-services" className="hover:text-amber-600 dark:hover:text-amber-400 transition-colors whitespace-nowrap shrink-0">
-              POS Financials
+            <a href="#products" className="hover:text-amber-600 dark:hover:text-amber-400 transition-colors whitespace-nowrap shrink-0">
+              Flours & Groundnut
             </a>
             <a href="#delivery" className="hover:text-amber-600 dark:hover:text-amber-400 transition-colors whitespace-nowrap shrink-0">
               Doorstep Delivery
@@ -83,7 +70,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             {/* Direct WhatsApp Callout Button */}
             <a
-              href={createWhatsAppUrl("Hello Reyflux Enterprises, I am reaching out from your website to place an order or inquire.")}
+              href={createWhatsAppUrl("Hello Reyflux Enterprises, I am reaching out from your website to place an order or inquire about foodstuffs.")}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-colors shadow-md whitespace-nowrap"
@@ -169,14 +156,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             onClick={() => setMobileMenuOpen(false)}
             className="block px-3 py-2 text-base font-semibold text-slate-800 dark:text-slate-200 hover:bg-amber-50 dark:hover:bg-slate-800 rounded-md"
           >
-            Garri, Palm Oil & Cassava Flour
-          </a>
-          <a
-            href="#pos-services"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block px-3 py-2 text-base font-semibold text-slate-800 dark:text-slate-200 hover:bg-amber-50 dark:hover:bg-slate-800 rounded-md"
-          >
-            POS Financials
+            Organic Foodstuffs
           </a>
           <a
             href="#delivery"

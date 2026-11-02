@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, ZoomIn, CheckCircle2, Phone, MapPin, Truck, Sparkles, ExternalLink } from 'lucide-react';
 import { COMPANY_INFO, createWhatsAppUrl } from '../data/companyInfo';
+import { ReyfluxLogo } from './ReyfluxLogo';
 
 interface FlyerModalProps {
   isOpen: boolean;
@@ -18,15 +19,7 @@ export const FlyerModal: React.FC<FlyerModalProps> = ({ isOpen, onClose }) => {
         
         {/* Modal Header */}
         <div className="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-amber-500 via-orange-500 to-red-600 text-white shrink-0">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-white/20 backdrop-blur-sm flex items-center justify-center font-black">
-              R
-            </div>
-            <div>
-              <h2 className="text-base font-bold leading-tight">REYFLUX ENTERPRISES LIMITED</h2>
-              <p className="text-xs text-amber-100 font-medium">Official Business Poster & Services Verification</p>
-            </div>
-          </div>
+          <ReyfluxLogo size="sm" showTagline={false} />
 
           <div className="flex items-center gap-2">
             <div className="flex bg-black/20 p-1 rounded-lg text-xs font-semibold">
@@ -65,23 +58,19 @@ export const FlyerModal: React.FC<FlyerModalProps> = ({ isOpen, onClose }) => {
               <div className="relative group max-w-xl rounded-xl overflow-hidden shadow-2xl border-4 border-amber-400/80 bg-amber-900">
                 <img
                   src={COMPANY_INFO.flyerImagePath}
-                  alt="Reyflux Enterprises Limited Official Flyer - Pure Organic Palm Oil, Garri, Cassava Flour & POS Available"
+                  alt="Reyflux Enterprises Limited Official Flyer - Pure Organic Palm Oil, Garri, Cassava Flour, Plantain Flour, Amala Flour, Groundnut"
                   className="w-full h-auto object-contain max-h-[60vh] transition-transform duration-300 group-hover:scale-[1.02]"
                 />
                 
                 {/* Hotspot Indicators */}
-                <div className="absolute top-[35%] left-[45%] group/spot bg-red-600/90 text-white text-[11px] font-bold px-2.5 py-1 rounded-full shadow-lg border border-white cursor-pointer hover:scale-110 transition-transform flex items-center gap-1">
+                <div className="absolute top-[35%] left-[45%] group/spot bg-red-600/90 text-white text-[11px] font-bold px-2.5 py-1 rounded-full shadow-lg border border-white flex items-center gap-1">
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
                   <span>Palm Oil (100% Organic)</span>
                 </div>
 
-                <div className="absolute top-[60%] left-[25%] group/spot bg-amber-600/90 text-white text-[11px] font-bold px-2.5 py-1 rounded-full shadow-lg border border-white cursor-pointer hover:scale-110 transition-transform flex items-center gap-1">
+                <div className="absolute top-[60%] left-[25%] group/spot bg-amber-600/90 text-white text-[11px] font-bold px-2.5 py-1 rounded-full shadow-lg border border-white flex items-center gap-1">
                   <span className="w-2 h-2 rounded-full bg-amber-300" />
                   <span>Garri & Cassava Flour</span>
-                </div>
-
-                <div className="absolute top-[62%] right-[10%] group/spot bg-red-700 text-white text-[11px] font-bold px-2.5 py-1 rounded-full shadow-lg border border-white cursor-pointer hover:scale-110 transition-transform">
-                  <span>POS AVAILABLE</span>
                 </div>
               </div>
 
@@ -92,42 +81,49 @@ export const FlyerModal: React.FC<FlyerModalProps> = ({ isOpen, onClose }) => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               
-              {/* Column 1: Foodstuffs */}
+              {/* Column 1: Organic Oils & Staples */}
               <div className="bg-amber-50/60 dark:bg-slate-800/60 p-5 rounded-xl border border-amber-200 dark:border-slate-700 space-y-4">
                 <div className="flex items-center gap-2 text-amber-900 dark:text-amber-300 font-bold text-base">
                   <CheckCircle2 className="w-5 h-5 text-emerald-600" />
-                  <h3>Organic Foodstuffs Line</h3>
+                  <h3>Organic Oils & Crispy Staples</h3>
                 </div>
 
                 <div className="space-y-3 text-sm text-slate-700 dark:text-slate-300">
                   <div className="p-3 bg-white dark:bg-slate-900 rounded-lg shadow-sm border border-amber-100 dark:border-slate-800">
                     <h4 className="font-bold text-amber-800 dark:text-amber-400">Pure Organic Palm Oil</h4>
                     <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
-                      100% Natural • No Preservatives • No Colours. Packaged in 4L, 10L, 25L, and 50L drums.
+                      100% Natural • No Preservatives • No Colours. Available in 4L, 10L, 25L, and 50L drums.
                     </p>
                   </div>
 
                   <div className="p-3 bg-white dark:bg-slate-900 rounded-lg shadow-sm border border-amber-100 dark:border-slate-800">
-                    <h4 className="font-bold text-amber-800 dark:text-amber-400">Garri & Cassava Flour</h4>
+                    <h4 className="font-bold text-amber-800 dark:text-amber-400">Fresh Yellow & White Garri</h4>
                     <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
-                      Fried Yellow Garri, White Ijebu Garri, and High Quality Odorless Cassava Flour in 5kg, 10kg, 25kg, 50kg bags.
+                      Fried Yellow Garri & Extra Sour White Ijebu Garri in 5kg, 10kg, 25kg, 50kg sacks.
+                    </p>
+                  </div>
+
+                  <div className="p-3 bg-white dark:bg-slate-900 rounded-lg shadow-sm border border-amber-100 dark:border-slate-800">
+                    <h4 className="font-bold text-amber-800 dark:text-amber-400">Crunchy Groundnut</h4>
+                    <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
+                      Crispy groundnut and raw peeled seeds in 2kg, 5kg, and 10kg bags.
                     </p>
                   </div>
                 </div>
               </div>
 
-              {/* Column 2: POS & Location */}
+              {/* Column 2: Healthy Flours & Location */}
               <div className="bg-red-50/60 dark:bg-slate-800/60 p-5 rounded-xl border border-red-200 dark:border-slate-700 space-y-4">
                 <div className="flex items-center gap-2 text-red-900 dark:text-red-300 font-bold text-base">
                   <CheckCircle2 className="w-5 h-5 text-red-600" />
-                  <h3>POS Services & Location Details</h3>
+                  <h3>Healthy Flours & Address</h3>
                 </div>
 
                 <div className="space-y-3 text-sm text-slate-700 dark:text-slate-300">
                   <div className="p-3 bg-white dark:bg-slate-900 rounded-lg shadow-sm border border-red-100 dark:border-slate-800">
-                    <h4 className="font-bold text-red-800 dark:text-red-400">Financial Agency (POS)</h4>
+                    <h4 className="font-bold text-red-800 dark:text-red-400">Flour Selection</h4>
                     <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
-                      Cash withdrawals, bank transfers, bill payments, airtime & data top-up, plus emergency doorstep cash delivery.
+                      High Quality Odorless Cassava Flour, Pure Plantain Flour (Diabetic friendly), and Amala Yam Flour.
                     </p>
                   </div>
 

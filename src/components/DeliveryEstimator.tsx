@@ -41,19 +41,19 @@ export const DeliveryEstimator: React.FC = () => {
   };
 
   return (
-    <section id="delivery" className="py-16 bg-amber-50/40 dark:bg-slate-900 border-t border-amber-200/50 dark:border-slate-800 w-full">
-      <div className="w-full px-4 sm:px-8 lg:px-12 space-y-12">
+    <section id="delivery" className="py-8 sm:py-10 bg-amber-50/40 dark:bg-slate-900 border-t border-amber-200/50 dark:border-slate-800">
+      <div className="w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         
         {/* Section Header */}
-        <div className="text-center max-w-4xl mx-auto space-y-3">
+        <div className="text-center max-w-3xl mx-auto space-y-3">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/80 border border-emerald-300 dark:border-emerald-800 text-emerald-900 dark:text-emerald-300 text-xs font-bold uppercase tracking-wider">
             <Truck className="w-4 h-4 text-emerald-600" />
             <span>NATIONWIDE DOORSTEP LOGISTICS</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             Delivery & Live Order Tracker
           </h2>
-          <p className="text-sm sm:text-base lg:text-lg text-slate-600 dark:text-slate-400">
+          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400">
             "{COMPANY_INFO.deliveryNotes}" Sealed anti-spill jerrycans and moisture-proof sacks shipped with care.
           </p>
         </div>
@@ -68,20 +68,20 @@ export const DeliveryEstimator: React.FC = () => {
                 <MapPin className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="font-extrabold text-slate-900 dark:text-white text-base sm:text-lg">Delivery Fee Calculator</h3>
+                <h3 className="font-extrabold text-slate-900 dark:text-white text-base">Delivery Fee Calculator</h3>
                 <p className="text-xs text-slate-500">Calculate instant doorstep shipping fee</p>
               </div>
             </div>
 
             <div className="space-y-4">
               <div>
-                <label className="block text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
                   Select Delivery Location:
                 </label>
                 <select
                   value={destination}
                   onChange={(e) => setDestination(e.target.value)}
-                  className="w-full p-3.5 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs sm:text-sm font-semibold text-slate-900 dark:text-white focus:ring-2 focus:ring-amber-500"
+                  className="w-full p-3 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs font-semibold text-slate-900 dark:text-white focus:ring-2 focus:ring-amber-500"
                 >
                   {Object.entries(deliveryRates).map(([key, value]) => (
                     <option key={key} value={key}>
@@ -92,7 +92,7 @@ export const DeliveryEstimator: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
                   Order Volume / Package Size:
                 </label>
                 <div className="grid grid-cols-3 gap-2">
@@ -105,7 +105,7 @@ export const DeliveryEstimator: React.FC = () => {
                       key={size.id}
                       type="button"
                       onClick={() => setItemWeight(size.id)}
-                      className={`p-3 text-xs sm:text-sm font-bold rounded-xl border transition-colors ${
+                      className={`p-2.5 text-xs font-bold rounded-xl border transition-colors ${
                         itemWeight === size.id
                           ? 'bg-amber-600 text-white border-amber-600'
                           : 'bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300'
@@ -118,21 +118,21 @@ export const DeliveryEstimator: React.FC = () => {
               </div>
 
               {/* Estimate Output */}
-              <div className="p-5 bg-amber-50 dark:bg-slate-900 rounded-xl border border-amber-200 dark:border-slate-700 space-y-2">
-                <div className="flex justify-between items-center text-xs sm:text-sm">
+              <div className="p-4 bg-amber-50 dark:bg-slate-900 rounded-xl border border-amber-200 dark:border-slate-700 space-y-2">
+                <div className="flex justify-between items-center text-xs">
                   <span className="text-slate-600 dark:text-slate-400">Estimated Delivery Fee:</span>
-                  <span className="text-xl sm:text-2xl font-black text-amber-600 font-mono">₦{estimatedFee.toLocaleString()}</span>
+                  <span className="text-xl font-black text-amber-600 font-mono">₦{estimatedFee.toLocaleString()}</span>
                 </div>
 
-                <div className="flex justify-between items-center text-xs sm:text-sm">
+                <div className="flex justify-between items-center text-xs">
                   <span className="text-slate-600 dark:text-slate-400">Estimated Time:</span>
                   <span className="font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
-                    <Clock className="w-4 h-4" />
+                    <Clock className="w-3.5 h-3.5" />
                     {currentRate.time}
                   </span>
                 </div>
 
-                <p className="text-[11px] text-slate-500 pt-2 border-t border-amber-200/50 dark:border-slate-800">
+                <p className="text-[10px] text-slate-500 pt-1 border-t border-amber-200/50 dark:border-slate-800">
                   Dispatch Partner: {currentRate.note}. Anti-leak seals included for all Palm Oil containers.
                 </p>
               </div>
@@ -146,13 +146,13 @@ export const DeliveryEstimator: React.FC = () => {
                 <Navigation className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="font-extrabold text-slate-900 dark:text-white text-base sm:text-lg">Live Order Tracker</h3>
+                <h3 className="font-extrabold text-slate-900 dark:text-white text-base">Live Order Tracker</h3>
                 <p className="text-xs text-slate-500">Track your pending delivery</p>
               </div>
             </div>
 
             <form onSubmit={handleTrackOrder} className="space-y-3">
-              <label className="block text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300">
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
                 Enter Order ID (e.g. <span className="font-mono text-amber-600 cursor-pointer" onClick={() => setTrackingIdInput('REY-8492')}>REY-8492</span>):
               </label>
               <div className="flex gap-2">
@@ -161,11 +161,11 @@ export const DeliveryEstimator: React.FC = () => {
                   placeholder="e.g. REY-8492"
                   value={trackingIdInput}
                   onChange={(e) => setTrackingIdInput(e.target.value)}
-                  className="flex-1 px-3.5 py-2.5 text-xs sm:text-sm bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white font-mono uppercase focus:ring-2 focus:ring-amber-500"
+                  className="flex-1 px-3 py-2 text-xs bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white font-mono uppercase focus:ring-2 focus:ring-amber-500"
                 />
                 <button
                   type="submit"
-                  className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold rounded-xl transition-colors shrink-0"
+                  className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl transition-colors shrink-0"
                 >
                   Track Status
                 </button>
@@ -174,38 +174,38 @@ export const DeliveryEstimator: React.FC = () => {
 
             {/* Tracking Result View */}
             {trackingResult ? (
-              <div className="p-5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 space-y-3 text-xs sm:text-sm">
+              <div className="p-4 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 space-y-3 text-xs">
                 <div className="flex justify-between items-center pb-2 border-b border-slate-200 dark:border-slate-800">
-                  <span className="font-extrabold text-slate-900 dark:text-white font-mono text-base">{trackingResult.id}</span>
-                  <span className="bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 font-bold px-3 py-0.5 rounded-full text-xs">
+                  <span className="font-extrabold text-slate-900 dark:text-white font-mono">{trackingResult.id}</span>
+                  <span className="bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 font-bold px-2.5 py-0.5 rounded-full text-[10px]">
                     {trackingResult.status}
                   </span>
                 </div>
 
-                <div className="space-y-2.5">
+                <div className="space-y-2">
                   {trackingResult.steps.map((step: any, idx: number) => (
-                    <div key={idx} className="flex items-start gap-2.5">
-                      <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 ${
+                    <div key={idx} className="flex items-start gap-2">
+                      <div className={`w-4 h-4 rounded-full flex items-center justify-center shrink-0 mt-0.5 ${
                         step.completed ? 'bg-emerald-500 text-white' : 'bg-slate-300 text-slate-600'
                       }`}>
-                        <CheckCircle2 className="w-3.5 h-3.5" />
+                        <CheckCircle2 className="w-3 h-3" />
                       </div>
                       <div className="flex-1">
                         <p className={`font-semibold ${step.completed ? 'text-slate-800 dark:text-slate-200' : 'text-slate-400'}`}>
                           {step.label}
                         </p>
-                        <p className="text-xs text-slate-400 font-mono">{step.time}</p>
+                        <p className="text-[10px] text-slate-400 font-mono">{step.time}</p>
                       </div>
                     </div>
                   ))}
                 </div>
 
-                <div className="p-3 bg-amber-50 dark:bg-amber-950/50 rounded-lg text-amber-900 dark:text-amber-300 text-xs sm:text-sm">
+                <div className="p-2.5 bg-amber-50 dark:bg-amber-950/50 rounded-lg text-amber-900 dark:text-amber-300 text-[11px]">
                   Driver: <span className="font-bold">{trackingResult.driver}</span> • ETA: <span className="font-bold">{trackingResult.estimatedArrival}</span>
                 </div>
               </div>
             ) : (
-              <div className="p-5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-dashed border-slate-300 dark:border-slate-800 text-center text-xs sm:text-sm text-slate-500 space-y-1">
+              <div className="p-4 bg-slate-50 dark:bg-slate-900 rounded-xl border border-dashed border-slate-300 dark:border-slate-800 text-center text-xs text-slate-500 space-y-1">
                 <p>Click <span className="font-bold text-amber-600 underline cursor-pointer" onClick={() => setTrackingIdInput('REY-8492')}>REY-8492</span> above to preview live tracking simulation.</p>
               </div>
             )}
