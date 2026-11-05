@@ -203,7 +203,7 @@ export const ProductStore: React.FC<ProductStoreProps> = ({
 
   return (
     <section id="products" className="py-6 sm:py-8 bg-white dark:bg-slate-950">
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-7">
+      <div className="w-full max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-10 space-y-7">
         
         {/* ROW 1: FEATURED PRODUCTS (LEFT) + DELIVERY FEE CALCULATOR (RIGHT) */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">

@@ -52,7 +52,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     <header className="sticky top-0 z-40 bg-white dark:bg-slate-900 border-b border-slate-200/90 dark:border-slate-800 transition-colors shadow-2xs">
       
       {/* Top Row: Logo, Search, Account, Cart */}
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5">
+      <div className="w-full max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-10 py-2.5">
         <div className="flex items-center justify-between gap-4">
           
           {/* Logo */}
@@ -173,7 +173,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Bottom Row: Navigation Links + Action CTAs (Mockup row 2) */}
       <div className="border-t border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 hidden md:block">
-        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-10">
           <div className="flex items-center justify-between h-11">
             
             {/* Nav links */}

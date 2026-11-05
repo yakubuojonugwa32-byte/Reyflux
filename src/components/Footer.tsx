@@ -13,7 +13,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenFlyer }) => {
       
       {/* 1. MOCKUP PROMINENT ORANGE METRIC & BRAND STRIP */}
       <div className="w-full bg-[#E55318] text-white py-4 px-4 sm:px-6 lg:px-8 shadow-md">
-        <div className="w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-4">
+        <div className="w-full max-w-[1720px] mx-auto flex flex-col lg:flex-row items-center justify-between gap-4">
           
           {/* Left Metrics (2,000+ Orders, 500+ Customers, 100% Natural, Nationwide) */}
           <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 sm:gap-6 text-xs sm:text-sm font-black">
@@ -100,7 +100,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenFlyer }) => {
 
       {/* 2. DETAILED DIRECTORY FOOTER */}
       <div className="bg-slate-950 text-slate-400 py-8 px-4 sm:px-6 lg:px-8 text-xs border-t border-slate-900">
-        <div className="w-full max-w-7xl mx-auto space-y-8">
+        <div className="w-full max-w-[1720px] mx-auto space-y-8">
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             
