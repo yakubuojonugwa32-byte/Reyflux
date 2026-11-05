@@ -39,8 +39,8 @@ Please confirm delivery timeline and payment terms.`;
   };
 
   return (
-    <section id="wholesale" className="py-8 sm:py-10 bg-white dark:bg-slate-900 border-t border-amber-200/50 dark:border-slate-800">
-      <div className="w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+    <section id="wholesale" className="py-6 sm:py-8 bg-white dark:bg-slate-900 border-t border-amber-200/50 dark:border-slate-800">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-3">

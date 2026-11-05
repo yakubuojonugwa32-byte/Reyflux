@@ -22,6 +22,7 @@ export default function App() {
   const [isAdminOpen, setIsAdminOpen] = useState<boolean>(false);
   const [isAiChatOpen, setIsAiChatOpen] = useState<boolean>(false);
   const [darkMode, setDarkMode] = useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   // Sync Dark Mode with document element
   useEffect(() => {
@@ -85,6 +86,8 @@ export default function App() {
         onToggleAdmin={() => setIsAdminOpen(!isAdminOpen)}
         darkMode={darkMode}
         onToggleDarkMode={() => setDarkMode(!darkMode)}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
       />
 
       {/* Main Content Area */}
@@ -106,6 +109,7 @@ export default function App() {
           onAddToCart={handleAddToCart}
           selectedCategory={selectedCategory}
           onSelectCategory={setSelectedCategory}
+          searchQuery={searchQuery}
         />
 
         {/* Nationwide Doorstep Delivery & Live Tracker */}

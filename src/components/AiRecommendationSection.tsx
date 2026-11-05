@@ -110,7 +110,7 @@ export const AiRecommendationSection: React.FC<AiRecommendationSectionProps> = (
   if (recommendations.length === 0) return null;
 
   return (
-    <section className="bg-gradient-to-r from-amber-500/10 via-orange-500/5 to-red-500/10 rounded-3xl p-6 sm:p-8 border border-amber-300/60 dark:border-slate-800 space-y-6">
+    <section className="bg-gradient-to-r from-amber-500/10 via-orange-500/5 to-red-500/10 rounded-2xl p-4 sm:p-6 border border-amber-300/60 dark:border-slate-800 space-y-4">
       
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4">
@@ -172,9 +172,18 @@ export const AiRecommendationSection: React.FC<AiRecommendationSectionProps> = (
                 </div>
               </div>
 
+              <div className="flex items-center justify-between text-[10px] text-slate-500">
+                <span className="font-extrabold text-amber-700 dark:text-amber-400 uppercase tracking-wider px-2 py-0.5 rounded bg-amber-50 dark:bg-amber-950/70 border border-amber-200 dark:border-amber-900/60">
+                  {product.volumeOrWeight}
+                </span>
+                <span className="font-semibold text-emerald-600 dark:text-emerald-400">
+                  {product.stockCount} in stock
+                </span>
+              </div>
+
               <h4 
                 onClick={() => onProductClick?.(product)}
-                className="font-extrabold text-xs text-slate-900 dark:text-white line-clamp-2 leading-snug cursor-pointer hover:text-amber-600 transition-colors"
+                className="font-extrabold text-xs text-slate-900 dark:text-white leading-snug cursor-pointer hover:text-amber-600 transition-colors"
               >
                 {product.name}
               </h4>
@@ -186,15 +195,25 @@ export const AiRecommendationSection: React.FC<AiRecommendationSectionProps> = (
               />
             </div>
 
-            {/* Quick Action */}
-            <div className="pt-2">
+            {/* Quick Actions */}
+            <div className="pt-2 grid grid-cols-2 gap-1.5 border-t border-slate-100 dark:border-slate-800">
               <button
                 onClick={() => onAddToCart(product, 1)}
-                className="w-full flex items-center justify-center gap-1.5 py-2 px-3 text-xs font-bold text-white bg-amber-600 hover:bg-amber-700 rounded-xl transition-colors shadow-xs"
+                className="w-full flex items-center justify-center gap-1 py-2 px-2 text-[11px] font-bold text-white bg-amber-600 hover:bg-amber-700 rounded-xl transition-colors shadow-xs"
               >
-                <ShoppingBag className="w-3.5 h-3.5" />
-                <span>Add to Cart</span>
+                <ShoppingBag className="w-3 h-3" />
+                <span>Add</span>
               </button>
+
+              <a
+                href={createWhatsAppUrl(`Hello Reyflux Enterprises, I want to order "${product.name}" (${product.volumeOrWeight}) for N${product.price.toLocaleString()}.`)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full flex items-center justify-center gap-1 py-2 px-2 text-[11px] font-bold text-emerald-800 dark:text-emerald-200 bg-emerald-100 dark:bg-emerald-950/80 hover:bg-emerald-200 rounded-xl transition-colors text-center"
+              >
+                <Phone className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                <span>Order</span>
+              </a>
             </div>
 
           </div>
