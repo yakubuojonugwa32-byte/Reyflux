@@ -109,12 +109,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSelectCategory }) =>
 
           </div>
 
-          {/* Right Hero Column: Authentic Photography Banner with "Good Food Brighter Lives" */}
+          {/* Right Hero Column: Authentic Photography Banner without text */}
           <div className="lg:col-span-5">
-            <div className="relative rounded-2xl overflow-hidden shadow-lg border border-amber-200/50 dark:border-slate-800 group">
+            <div className="relative rounded-2xl overflow-hidden shadow-lg border border-amber-200/50 dark:border-slate-800 group bg-stone-100 dark:bg-slate-900">
               <img
-                src="/assets/hero-mockup-right.png"
-                alt="Pure Organic Red Palm Oil bottles, jerrycans and palm fruit bunches by Reyflux - Good Food Brighter Lives"
+                src="/assets/hero-clean.png"
+                alt="Pure Organic Red Palm Oil bottles, jerrycans and palm fruit bunches by Reyflux"
                 className="w-full h-auto object-cover object-center transform group-hover:scale-[1.01] transition-transform duration-500"
               />
             </div>

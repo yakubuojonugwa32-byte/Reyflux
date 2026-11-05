@@ -63,7 +63,7 @@ export const PRODUCTS: Product[] = [
     stockCount: 30,
     rating: 5.0,
     reviewsCount: 94,
-    image: '/assets/hero-mockup-right.png',
+    image: '/assets/hero-clean.png',
     badgeText: 'Save ₦8,000 Today',
     uses: ['Restaurants & Caterers', 'Family Monthly Stock', 'Confectionery']
   },
@@ -104,7 +104,7 @@ export const PRODUCTS: Product[] = [
     stockCount: 12,
     rating: 5.0,
     reviewsCount: 42,
-    image: '/assets/hero-mockup-right.png',
+    image: '/assets/hero-clean.png',
     badgeText: 'Wholesale Super Deal',
     uses: ['Industrial Catering', 'Institutional Kitchens', 'Export & Bulk Distribution']
   },
