@@ -119,7 +119,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               className="hidden sm:flex items-center gap-2 p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
               title="Merchant & Account Settings"
             >
-              <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-[#0F172A] dark:text-slate-200">
+              <div className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-[#0F172A] dark:text-slate-200">
                 <User className="w-4 h-4" />
               </div>
               <div className="leading-tight text-left">
@@ -141,7 +141,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               <div className="relative">
                 <ShoppingCart className="w-4 h-4 text-[#0F172A] dark:text-white group-hover:text-[#F97316] transition-colors" />
                 {cartCount > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-[#F97316] text-white text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow-xs">
+                  <span className="absolute -top-2 -right-2 bg-[#F97316] text-white text-[10px] font-black w-4 h-4 rounded-md flex items-center justify-center shadow-xs">
                     {cartCount}
                   </span>
                 )}
@@ -213,7 +213,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               >
                 Home
                 {activeTab === 'home' && (
-                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#F97316] rounded-full" />
+                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#F97316]" />
                 )}
               </button>
 
@@ -227,7 +227,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               >
                 Featured Products
                 {activeTab === 'products' && (
-                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#F97316] rounded-full" />
+                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#F97316]" />
                 )}
               </button>
 
@@ -241,7 +241,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               >
                 Wholesale Depot
                 {activeTab === 'wholesale' && (
-                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#F97316] rounded-full" />
+                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#F97316]" />
                 )}
               </button>
 
@@ -255,7 +255,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               >
                 Nationwide Delivery
                 {activeTab === 'delivery' && (
-                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#F97316] rounded-full" />
+                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#F97316]" />
                 )}
               </button>
 
@@ -269,7 +269,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               >
                 Store Location &amp; Contact
                 {activeTab === 'contact' && (
-                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#F97316] rounded-full" />
+                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#F97316]" />
                 )}
               </button>
             </nav>

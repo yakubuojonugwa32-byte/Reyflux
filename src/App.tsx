@@ -123,38 +123,6 @@ export default function App() {
 
       </main>
 
-      {/* Floating Action Buttons Dock (Lower Right Corner) */}
-      <aside 
-        aria-label="Quick Contact & Assistant"
-        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 flex items-center gap-2.5 pointer-events-auto"
-      >
-        {/* Floating WhatsApp Quick Action Button */}
-        <a
-          href={createWhatsAppUrl("Hello Reyflux Enterprises, I am reaching out to order Palm Oil, Garri, Flour, or Groundnut.")}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group flex items-center gap-2 px-3.5 py-2.5 bg-[#16A34A] hover:bg-[#15803D] text-white font-bold text-xs rounded-full shadow-lg shadow-green-600/30 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0"
-          title="Direct WhatsApp Order"
-        >
-          <Phone className="w-4 h-4 shrink-0" />
-          <span className="hidden sm:inline whitespace-nowrap text-xs">
-            WhatsApp Order
-          </span>
-        </a>
-
-        {/* Floating AI Assistant Quick Action Button */}
-        <button
-          onClick={() => setIsAiChatOpen(true)}
-          className="flex items-center gap-2 px-3.5 py-2.5 bg-white dark:bg-slate-900 border border-[#E2E8F0] dark:border-slate-700 hover:border-[#F97316] text-[#0F172A] dark:text-white font-bold text-xs rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0"
-          title="Open AI Foodstuffs Assistant"
-        >
-          <Sparkles className="w-4 h-4 text-[#F97316] shrink-0" />
-          <span className="hidden sm:inline whitespace-nowrap text-xs">
-            Ask AI
-          </span>
-        </button>
-      </aside>
-
       {/* Footer Sign-off */}
       <Footer onOpenFlyer={() => setIsFlyerOpen(true)} />
 

@@ -102,27 +102,73 @@ Please confirm delivery timeline and payment terms.`;
                 </div>
               </div>
 
-              {/* Quantity Slider */}
+              {/* Quantity Direct Input */}
               <div className="space-y-2">
-                <div className="flex justify-between items-center text-xs font-bold">
-                  <span className="text-slate-700 dark:text-slate-300">Quantity Needed ({selectedItem.unitLabel}):</span>
-                  <span className="text-amber-600 font-mono text-base font-black">{units} Units</span>
+                <label htmlFor="wholesale-quantity-input" className="block text-xs font-bold text-slate-700 dark:text-slate-300">
+                  Quantity Needed ({selectedItem.unitLabel}):
+                </label>
+
+                <div className="flex items-center gap-3">
+                  <div className="relative flex-1 flex items-center">
+                    <input
+                      id="wholesale-quantity-input"
+                      type="number"
+                      min="1"
+                      max="10000"
+                      value={units || ''}
+                      onChange={(e) => {
+                        const val = parseInt(e.target.value, 10);
+                        setUnits(isNaN(val) ? 0 : Math.max(1, val));
+                      }}
+                      placeholder="Enter quantity needed (e.g. 10, 25, 50)..."
+                      className="w-full pl-3.5 pr-14 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-sm font-bold font-mono text-slate-900 dark:text-white focus:outline-hidden focus:border-amber-600 focus:ring-1 focus:ring-amber-600 shadow-2xs"
+                    />
+                    <span className="absolute right-3 text-xs font-bold text-amber-600 dark:text-amber-400">
+                      Units
+                    </span>
+                  </div>
+
+                  <div className="flex items-center border border-slate-300 dark:border-slate-700 rounded-xl overflow-hidden bg-white dark:bg-slate-900 shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => setUnits((prev) => Math.max(1, prev - 1))}
+                      className="px-3 py-2 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 font-bold text-sm transition-colors"
+                      title="Decrease quantity by 1"
+                    >
+                      -
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setUnits((prev) => Math.max(1, prev - 5))}
+                      className="px-2.5 py-2 text-xs font-semibold text-slate-500 dark:text-slate-400 border-l border-r border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800"
+                      title="Decrease by 5"
+                    >
+                      -5
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setUnits((prev) => prev + 5)}
+                      className="px-2.5 py-2 text-xs font-semibold text-slate-500 dark:text-slate-400 border-r border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800"
+                      title="Increase by 5"
+                    >
+                      +5
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setUnits((prev) => prev + 1)}
+                      className="px-3 py-2 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 font-bold text-sm transition-colors"
+                      title="Increase quantity by 1"
+                    >
+                      +
+                    </button>
+                  </div>
                 </div>
 
-                <input
-                  type="range"
-                  min="5"
-                  max="100"
-                  step="5"
-                  value={units}
-                  onChange={(e) => setUnits(Number(e.target.value))}
-                  className="w-full accent-amber-600 cursor-pointer h-2 bg-slate-200 dark:bg-slate-700 rounded-lg"
-                />
-
-                <div className="flex justify-between text-[11px] text-slate-500">
-                  <span>5 Units (Standard)</span>
-                  <span>25 Units (10% OFF)</span>
-                  <span>50+ Units (15% OFF)</span>
+                <div className="flex justify-between text-[11px] text-slate-500 pt-0.5">
+                  <span>1–9 Units (Standard Rate)</span>
+                  <span>10–24 Units (5% OFF)</span>
+                  <span>25–49 Units (10% OFF)</span>
+                  <span className="font-bold text-amber-600">50+ Units (15% OFF)</span>
                 </div>
               </div>
 

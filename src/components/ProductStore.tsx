@@ -289,7 +289,7 @@ export const ProductStore: React.FC<ProductStoreProps> = ({
             
             {/* Header */}
             <div className="flex items-start gap-2.5">
-              <div className="w-8 h-8 rounded-full bg-[#E8F5E9] dark:bg-emerald-950 flex items-center justify-center text-[#0B7B4B] dark:text-emerald-400 shrink-0 mt-0.5">
+              <div className="w-8 h-8 rounded-xl bg-[#E8F5E9] dark:bg-emerald-950 flex items-center justify-center text-[#0B7B4B] dark:text-emerald-400 shrink-0 mt-0.5">
                 <Truck className="w-4 h-4" />
               </div>
               <div>

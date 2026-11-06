@@ -185,7 +185,7 @@ export const DeliveryEstimator: React.FC = () => {
                 <div className="space-y-2">
                   {trackingResult.steps.map((step: any, idx: number) => (
                     <div key={idx} className="flex items-start gap-2">
-                      <div className={`w-4 h-4 rounded-full flex items-center justify-center shrink-0 mt-0.5 ${
+                      <div className={`w-4 h-4 rounded-md flex items-center justify-center shrink-0 mt-0.5 ${
                         step.completed ? 'bg-emerald-500 text-white' : 'bg-slate-300 text-slate-600'
                       }`}>
                         <CheckCircle2 className="w-3 h-3" />

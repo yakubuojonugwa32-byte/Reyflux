@@ -327,7 +327,7 @@ export const InfiniteProductFeed: React.FC<InfiniteProductFeedProps> = ({
           Array.from({ length: 3 }).map((_, idx) => (
             <div
               key={idx}
-              className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-4 space-y-4 animate-pulse"
+              className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-4 space-y-4 opacity-80"
             >
               <div className="h-48 bg-slate-200 dark:bg-slate-800 rounded-xl" />
               <div className="space-y-2">

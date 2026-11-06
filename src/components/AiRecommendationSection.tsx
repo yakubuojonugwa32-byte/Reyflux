@@ -157,7 +157,7 @@ export const AiRecommendationSection: React.FC<AiRecommendationSectionProps> = (
         {isRefreshing ? (
           // Skeleton Loaders
           [...Array(4)].map((_, i) => (
-            <div key={i} className="bg-[#F8FAFC] dark:bg-slate-800/50 rounded-2xl p-4 border border-[#E2E8F0] dark:border-slate-800 animate-pulse space-y-3">
+            <div key={i} className="bg-[#F8FAFC] dark:bg-slate-800/50 rounded-2xl p-4 border border-[#E2E8F0] dark:border-slate-800 opacity-80 space-y-3">
               <div className="aspect-[4/3] w-full bg-slate-200 dark:bg-slate-700 rounded-xl" />
               <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-3/4" />
               <div className="h-3 bg-slate-200 dark:bg-slate-700 rounded w-1/2" />

@@ -88,7 +88,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
           <div className="p-5 overflow-y-auto flex-1 space-y-5 scrollbar-none">
             {cartItems.length === 0 ? (
               <div className="text-center py-12 space-y-3">
-                <div className="w-16 h-16 rounded-full bg-orange-50 dark:bg-slate-800 text-[#F97316] flex items-center justify-center mx-auto">
+                <div className="w-16 h-16 rounded-2xl bg-orange-50 dark:bg-slate-800 text-[#F97316] flex items-center justify-center mx-auto">
                   <ShoppingBag className="w-8 h-8" />
                 </div>
                 <h3 className="font-bold text-[#0F172A] dark:text-white text-base">Your cart is currently empty</h3>
