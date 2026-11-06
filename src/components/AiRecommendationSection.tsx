@@ -1,22 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { Product, PRODUCTS } from '../data/products';
-import { PriceDropBadge } from './PriceDropBadge';
 import { COMPANY_INFO, createWhatsAppUrl } from '../data/companyInfo';
-import { Sparkles, Bot, ShoppingBag, Phone, RefreshCw, Star, ArrowRight, ZoomIn } from 'lucide-react';
+import { Sparkles, ShoppingBag, Phone, RefreshCw, ZoomIn, CheckCircle2 } from 'lucide-react';
 
 interface AiRecommendationSectionProps {
   onAddToCart: (product: Product, quantity: number) => void;
   onProductClick?: (product: Product) => void;
-  sessionData: {
-    viewedProductIds: string[];
-    categoryAffinities: Record<string, number>;
-    recentSearch: string;
+  sessionData?: {
+    viewedProductIds?: string[];
+    categoryAffinities?: Record<string, number>;
+    recentSearch?: string;
   };
 }
 
 interface RecommendedProduct extends Product {
   aiReason?: string;
 }
+
+const DEFAULT_SESSION_DATA = {
+  viewedProductIds: [] as string[],
+  categoryAffinities: {} as Record<string, number>,
+  recentSearch: ''
+};
 
 const getClientFallbackRecommendations = (
   viewedProductIds: string[] = [],
@@ -37,22 +42,28 @@ const getClientFallbackRecommendations = (
     ...p,
     aiReason:
       p.category === primaryCat
-        ? `Top Pick in Organic Foodstuffs`
+        ? 'Frequently Bought with Your Selection'
         : p.isPopular
-        ? 'Top Seller in Suleja'
-        : 'Recommended for Your Kitchen'
+        ? 'Depot Top Choice'
+        : 'Recommended for You'
   }));
 };
 
 export const AiRecommendationSection: React.FC<AiRecommendationSectionProps> = ({
   onAddToCart,
   onProductClick,
-  sessionData
+  sessionData = DEFAULT_SESSION_DATA
 }) => {
+  const safeSession = {
+    viewedProductIds: sessionData?.viewedProductIds || [],
+    categoryAffinities: sessionData?.categoryAffinities || {},
+    recentSearch: sessionData?.recentSearch || ''
+  };
+
   const [recommendations, setRecommendations] = useState<RecommendedProduct[]>(() =>
     getClientFallbackRecommendations(
-      sessionData.viewedProductIds,
-      sessionData.categoryAffinities
+      safeSession.viewedProductIds,
+      safeSession.categoryAffinities
     )
   );
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
@@ -66,15 +77,15 @@ export const AiRecommendationSection: React.FC<AiRecommendationSectionProps> = (
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
-        body: JSON.stringify(sessionData)
+        body: JSON.stringify(safeSession)
       });
 
       const contentType = res.headers.get('content-type') || '';
       if (!res.ok || !contentType.includes('application/json')) {
         setRecommendations(
           getClientFallbackRecommendations(
-            sessionData.viewedProductIds,
-            sessionData.categoryAffinities
+            safeSession.viewedProductIds,
+            safeSession.categoryAffinities
           )
         );
         return;
@@ -86,16 +97,16 @@ export const AiRecommendationSection: React.FC<AiRecommendationSectionProps> = (
       } else {
         setRecommendations(
           getClientFallbackRecommendations(
-            sessionData.viewedProductIds,
-            sessionData.categoryAffinities
+            safeSession.viewedProductIds,
+            safeSession.categoryAffinities
           )
         );
       }
     } catch {
       setRecommendations(
         getClientFallbackRecommendations(
-          sessionData.viewedProductIds,
-          sessionData.categoryAffinities
+          safeSession.viewedProductIds,
+          safeSession.categoryAffinities
         )
       );
     } finally {
@@ -103,121 +114,141 @@ export const AiRecommendationSection: React.FC<AiRecommendationSectionProps> = (
     }
   };
 
+  const viewedCount = safeSession.viewedProductIds.length;
+  const recentSearch = safeSession.recentSearch;
+
   useEffect(() => {
     fetchRecommendations();
-  }, [sessionData.viewedProductIds.length, sessionData.recentSearch]);
+  }, [viewedCount, recentSearch]);
 
-  if (recommendations.length === 0) return null;
+  if (recommendations.length === 0 && !isRefreshing) return null;
 
   return (
-    <section className="bg-gradient-to-r from-amber-500/10 via-orange-500/5 to-red-500/10 rounded-2xl p-4 sm:p-6 border border-amber-300/60 dark:border-slate-800 space-y-4">
+    <section className="bg-white dark:bg-slate-900 rounded-2xl p-5 sm:p-6 border border-[#E2E8F0] dark:border-slate-800 space-y-5 shadow-xs">
       
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-red-600 text-white flex items-center justify-center font-bold shadow-md">
-            <Bot className="w-5 h-5 text-white animate-bounce" />
+          <div className="w-9 h-9 rounded-xl bg-orange-50 dark:bg-orange-950/60 flex items-center justify-center text-[#F97316]">
+            <Sparkles className="w-5 h-5" />
           </div>
           <div>
-            <div className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-800 dark:text-amber-300 uppercase tracking-wider">
-              <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-              <span>Real-Time AI Personalization</span>
-            </div>
-            <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+            <h3 className="text-lg sm:text-xl font-bold text-[#0F172A] dark:text-white tracking-tight">
               Recommended For Your Session
             </h3>
+            <p className="text-xs text-[#64748B] dark:text-slate-400 font-medium">
+              Curated items tailored to your browsing and dietary preferences
+            </p>
           </div>
         </div>
 
         <button
           onClick={fetchRecommendations}
           disabled={isRefreshing}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-amber-100 disabled:opacity-60 transition-colors"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-[#0F172A] dark:text-slate-300 bg-[#F8FAFC] dark:bg-slate-800 rounded-xl border border-[#E2E8F0] dark:border-slate-700 hover:border-[#F97316] disabled:opacity-60 transition-colors"
         >
-          <RefreshCw className={`w-3.5 h-3.5 text-amber-600 ${isRefreshing ? 'animate-spin' : ''}`} />
-          <span>{isRefreshing ? 'Analyzing...' : 'Refresh AI Picks'}</span>
+          <RefreshCw className={`w-3.5 h-3.5 text-[#F97316] ${isRefreshing ? 'animate-spin' : ''}`} />
+          <span>{isRefreshing ? 'Refreshing...' : 'Refresh Picks'}</span>
         </button>
       </div>
 
-      {/* Recommended Grid */}
+      {/* Grid: 4 Cards or Skeleton Loaders */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {recommendations.map((product) => (
-          <div
-            key={product.id}
-            className="bg-white dark:bg-slate-900 rounded-2xl border border-amber-200 dark:border-slate-800 p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between space-y-3"
-          >
-            <div className="space-y-2">
-              
-              {/* AI Reason Tag */}
-              <div className="inline-block bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-300 text-[10px] font-extrabold px-2 py-0.5 rounded-md border border-amber-300/60 dark:border-amber-800">
-                ✨ {product.aiReason || 'Matches your interest'}
-              </div>
+        {isRefreshing ? (
+          // Skeleton Loaders
+          [...Array(4)].map((_, i) => (
+            <div key={i} className="bg-[#F8FAFC] dark:bg-slate-800/50 rounded-2xl p-4 border border-[#E2E8F0] dark:border-slate-800 animate-pulse space-y-3">
+              <div className="aspect-[4/3] w-full bg-slate-200 dark:bg-slate-700 rounded-xl" />
+              <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-3/4" />
+              <div className="h-3 bg-slate-200 dark:bg-slate-700 rounded w-1/2" />
+              <div className="h-8 bg-slate-200 dark:bg-slate-700 rounded-xl" />
+            </div>
+          ))
+        ) : (
+          recommendations.map((product) => (
+            <div
+              key={product.id}
+              className="bg-[#FAFAF9] dark:bg-slate-800/60 rounded-2xl border border-[#E2E8F0] dark:border-slate-800 p-4 shadow-xs hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between space-y-3 group"
+            >
+              <div className="space-y-2">
+                
+                {/* AI Reason Line */}
+                <div className="text-[11px] font-semibold text-[#F97316] flex items-center gap-1">
+                  <span>✨</span>
+                  <span>{product.aiReason || 'Direct Mill Match'}</span>
+                </div>
 
-              {/* Image Frame */}
-              <div 
-                onClick={() => onProductClick?.(product)}
-                className="relative h-40 rounded-xl overflow-hidden bg-gradient-to-b from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-850 cursor-pointer group/rec"
-                title="Click to view full image and details"
-              >
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="w-full h-full object-cover object-center group-hover/rec:scale-105 transition-transform duration-300"
-                />
-                <div className="absolute inset-0 bg-slate-950/30 opacity-0 group-hover/rec:opacity-100 transition-opacity flex items-center justify-center">
-                  <span className="p-1.5 rounded-lg bg-white/90 dark:bg-slate-900/90 text-slate-900 dark:text-white shadow-md text-[10px] font-bold flex items-center gap-1">
-                    <ZoomIn className="w-3.5 h-3.5 text-amber-600" />
-                    <span>View</span>
+                {/* Image Frame with Strict 4:3 Ratio */}
+                <div 
+                  onClick={() => onProductClick?.(product)}
+                  className="relative aspect-[4/3] w-full rounded-xl overflow-hidden bg-white dark:bg-slate-900 border border-[#E2E8F0] dark:border-slate-800 cursor-pointer flex items-center justify-center"
+                  title="Click to view full image and details"
+                >
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-slate-950/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <span className="p-1.5 rounded-lg bg-white/95 dark:bg-slate-900/95 text-[#0F172A] dark:text-white shadow-xs text-[10px] font-bold flex items-center gap-1">
+                      <ZoomIn className="w-3.5 h-3.5 text-[#F97316]" />
+                      <span>Inspect</span>
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between text-[11px] text-[#64748B] pt-0.5">
+                  <span className="font-bold text-[#0F172A] dark:text-slate-300">
+                    {product.volumeOrWeight}
                   </span>
+                  <span className="font-semibold text-[#16A34A] dark:text-emerald-400">
+                    {product.stockCount} in stock
+                  </span>
+                </div>
+
+                <h4 
+                  onClick={() => onProductClick?.(product)}
+                  className="font-bold text-xs sm:text-[13px] text-[#0F172A] dark:text-white leading-snug cursor-pointer hover:text-[#F97316] transition-colors line-clamp-1"
+                >
+                  {product.name}
+                </h4>
+
+                <div className="flex items-baseline gap-1.5">
+                  <span className="font-mono font-black text-sm text-[#0F172A] dark:text-white">
+                    ₦{product.price.toLocaleString()}
+                  </span>
+                  {product.originalPrice > product.price && (
+                    <span className="font-mono text-[10px] text-[#94A3B8] line-through">
+                      ₦{product.originalPrice.toLocaleString()}
+                    </span>
+                  )}
                 </div>
               </div>
 
-              <div className="flex items-center justify-between text-[10px] text-slate-500">
-                <span className="font-extrabold text-amber-700 dark:text-amber-400 uppercase tracking-wider px-2 py-0.5 rounded bg-amber-50 dark:bg-amber-950/70 border border-amber-200 dark:border-amber-900/60">
-                  {product.volumeOrWeight}
-                </span>
-                <span className="font-semibold text-emerald-600 dark:text-emerald-400">
-                  {product.stockCount} in stock
-                </span>
+              {/* Action Buttons: Add to Cart (Orange) & WhatsApp (Green) */}
+              <div className="pt-2 grid grid-cols-2 gap-2 border-t border-[#E2E8F0] dark:border-slate-700/80">
+                <button
+                  onClick={() => onAddToCart(product, 1)}
+                  className="w-full flex items-center justify-center gap-1 py-2 px-2 text-xs font-bold text-white bg-[#F97316] hover:bg-[#EA580C] rounded-xl transition-colors shadow-xs"
+                >
+                  <ShoppingBag className="w-3.5 h-3.5" />
+                  <span>Add</span>
+                </button>
+
+                <a
+                  href={createWhatsAppUrl(`Hello Reyflux Enterprises, I want to order "${product.name}" (${product.volumeOrWeight}) for N${product.price.toLocaleString()}.`)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full flex items-center justify-center gap-1 py-2 px-2 text-xs font-bold text-white bg-[#16A34A] hover:bg-[#15803D] rounded-xl transition-colors shadow-xs"
+                >
+                  <Phone className="w-3.5 h-3.5" />
+                  <span>WhatsApp</span>
+                </a>
               </div>
 
-              <h4 
-                onClick={() => onProductClick?.(product)}
-                className="font-extrabold text-xs text-slate-900 dark:text-white leading-snug cursor-pointer hover:text-amber-600 transition-colors"
-              >
-                {product.name}
-              </h4>
-
-              <PriceDropBadge
-                price={product.price}
-                originalPrice={product.originalPrice}
-                size="sm"
-              />
             </div>
-
-            {/* Quick Actions */}
-            <div className="pt-2 grid grid-cols-2 gap-1.5 border-t border-slate-100 dark:border-slate-800">
-              <button
-                onClick={() => onAddToCart(product, 1)}
-                className="w-full flex items-center justify-center gap-1 py-2 px-2 text-[11px] font-bold text-white bg-amber-600 hover:bg-amber-700 rounded-xl transition-colors shadow-xs"
-              >
-                <ShoppingBag className="w-3 h-3" />
-                <span>Add</span>
-              </button>
-
-              <a
-                href={createWhatsAppUrl(`Hello Reyflux Enterprises, I want to order "${product.name}" (${product.volumeOrWeight}) for N${product.price.toLocaleString()}.`)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full flex items-center justify-center gap-1 py-2 px-2 text-[11px] font-bold text-emerald-800 dark:text-emerald-200 bg-emerald-100 dark:bg-emerald-950/80 hover:bg-emerald-200 rounded-xl transition-colors text-center"
-              >
-                <Phone className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
-                <span>Order</span>
-              </a>
-            </div>
-
-          </div>
-        ))}
+          ))
+        )}
       </div>
 
     </section>

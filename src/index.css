@@ -5,5 +5,21 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    background-color: #FAFAF9;
+    color: #0F172A;
   }
+}
+
+/* Custom Scrollbar Utility for Clean Shopify-Grade Modals */
+@utility scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Smooth Image Transitions */
+img {
+  image-rendering: -webkit-optimize-contrast;
 }

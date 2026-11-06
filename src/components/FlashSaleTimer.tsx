@@ -45,7 +45,7 @@ export const FlashSaleTimer: React.FC<FlashSaleTimerProps> = ({
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center font-bold">
-            <Flame className="w-5 h-5 text-amber-300 animate-bounce" />
+            <Flame className="w-5 h-5 text-amber-300" />
           </div>
           <div>
             <h4 className="font-extrabold text-sm sm:text-base leading-tight tracking-tight">
@@ -60,7 +60,7 @@ export const FlashSaleTimer: React.FC<FlashSaleTimerProps> = ({
         {/* Real-time Ticking Countdown Digits */}
         <div className="flex items-center gap-1.5 font-mono">
           <div className="flex flex-col items-center">
-            <div className="bg-black/60 backdrop-blur-md text-amber-400 text-sm sm:text-base font-black px-2.5 py-1 rounded-lg border border-amber-400/30 min-w-[36px] text-center shadow-inner animate-pulse">
+            <div className="bg-black/60 backdrop-blur-md text-amber-400 text-sm sm:text-base font-black px-2.5 py-1 rounded-lg border border-amber-400/30 min-w-[36px] text-center shadow-inner">
               {formatDigit(timeLeft.hours)}
             </div>
             <span className="text-[9px] text-amber-100 uppercase mt-0.5">Hours</span>
@@ -68,7 +68,7 @@ export const FlashSaleTimer: React.FC<FlashSaleTimerProps> = ({
           <span className="text-amber-300 font-extrabold text-base pb-3">:</span>
 
           <div className="flex flex-col items-center">
-            <div className="bg-black/60 backdrop-blur-md text-amber-400 text-sm sm:text-base font-black px-2.5 py-1 rounded-lg border border-amber-400/30 min-w-[36px] text-center shadow-inner animate-pulse">
+            <div className="bg-black/60 backdrop-blur-md text-amber-400 text-sm sm:text-base font-black px-2.5 py-1 rounded-lg border border-amber-400/30 min-w-[36px] text-center shadow-inner">
               {formatDigit(timeLeft.minutes)}
             </div>
             <span className="text-[9px] text-amber-100 uppercase mt-0.5">Mins</span>
@@ -76,7 +76,7 @@ export const FlashSaleTimer: React.FC<FlashSaleTimerProps> = ({
           <span className="text-amber-300 font-extrabold text-base pb-3">:</span>
 
           <div className="flex flex-col items-center">
-            <div className="bg-black/60 backdrop-blur-md text-red-300 text-sm sm:text-base font-black px-2.5 py-1 rounded-lg border border-red-400/50 min-w-[36px] text-center shadow-inner animate-pulse">
+            <div className="bg-black/60 backdrop-blur-md text-red-300 text-sm sm:text-base font-black px-2.5 py-1 rounded-lg border border-red-400/50 min-w-[36px] text-center shadow-inner">
               {formatDigit(timeLeft.seconds)}
             </div>
             <span className="text-[9px] text-amber-100 uppercase mt-0.5">Secs</span>
@@ -95,12 +95,12 @@ export const FlashSaleTimer: React.FC<FlashSaleTimerProps> = ({
         </div>
 
         {/* Progress Bar Container */}
-        <div className="w-full bg-black/40 h-3 rounded-full overflow-hidden p-0.5 border border-white/20">
+        <div className="w-full bg-black/40 h-3 rounded-md overflow-hidden p-0.5 border border-white/20">
           <div
-            className="bg-gradient-to-r from-amber-300 via-amber-400 to-yellow-300 h-full rounded-full transition-all duration-1000 shadow-md relative"
+            className="bg-gradient-to-r from-amber-300 via-amber-400 to-yellow-300 h-full rounded-sm transition-all duration-1000 shadow-md relative"
             style={{ width: `${claimedPercentage}%` }}
           >
-            <div className="absolute inset-0 bg-white/30 animate-pulse" />
+            <div className="absolute inset-0 bg-white/20" />
           </div>
         </div>
       </div>

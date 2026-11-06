@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { Product, PRODUCTS } from '../data/products';
 import { ProductImageModal } from './ProductImageModal';
-import { FlashSaleTimer } from './FlashSaleTimer';
-import { AiRecommendationSection } from './AiRecommendationSection';
 import { InfiniteProductFeed } from './InfiniteProductFeed';
 import { 
   ShoppingCart, Heart, Star, Truck, ArrowRight, CheckCircle2, ChevronLeft, ChevronRight, 
@@ -29,6 +27,7 @@ const FEATURED_PRODUCTS_MOCKUP = [
     rating: 4.9,
     reviews: 128,
     image: '/assets/product-palm-oil.png',
+    highResImage: '/assets/palm-oil-hires.jpg',
     isBestSeller: true,
     category: 'palm_oil'
   },
@@ -42,6 +41,7 @@ const FEATURED_PRODUCTS_MOCKUP = [
     rating: 4.8,
     reviews: 94,
     image: '/assets/product-garri.png',
+    highResImage: '/assets/foodstuffs-hires.jpg',
     isBestSeller: false,
     category: 'garri'
   },
@@ -55,6 +55,7 @@ const FEATURED_PRODUCTS_MOCKUP = [
     rating: 4.8,
     reviews: 76,
     image: '/assets/product-cassava-flour.png',
+    highResImage: '/assets/foodstuffs-hires.jpg',
     isBestSeller: false,
     category: 'cassava_flour'
   },
@@ -68,6 +69,7 @@ const FEATURED_PRODUCTS_MOCKUP = [
     rating: 4.7,
     reviews: 65,
     image: '/assets/product-plantain-flour.png',
+    highResImage: '/assets/foodstuffs-hires.jpg',
     isBestSeller: false,
     category: 'plantain_flour'
   },
@@ -81,6 +83,7 @@ const FEATURED_PRODUCTS_MOCKUP = [
     rating: 4.8,
     reviews: 58,
     image: '/assets/product-groundnut.png',
+    highResImage: '/assets/foodstuffs-hires.jpg',
     isBestSeller: false,
     category: 'groundnut'
   }
@@ -119,20 +122,6 @@ export const ProductStore: React.FC<ProductStoreProps> = ({
   const [packageSize, setPackageSize] = useState<'small' | 'medium' | 'bulk'>('medium');
   const [calculatedMessage, setCalculatedMessage] = useState<string | null>(null);
 
-  // Testimonial Carousel state
-  const [testimonialPage, setTestimonialPage] = useState<number>(0);
-
-  // Session behavior state for AI recommendation engine
-  const [sessionData, setSessionData] = useState<{
-    viewedProductIds: string[];
-    categoryAffinities: Record<string, number>;
-    recentSearch: string;
-  }>({
-    viewedProductIds: ['palm-oil-4l', 'garri-yellow-10kg'],
-    categoryAffinities: { palm_oil: 3, garri: 4 },
-    recentSearch: searchQuery
-  });
-
   const toggleWishlist = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
     setWishlist((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -169,38 +158,6 @@ export const ProductStore: React.FC<ProductStoreProps> = ({
     setTimeout(() => setCalculatedMessage(null), 6000);
   };
 
-  // Customer testimonials
-  const TESTIMONIALS = [
-    [
-      {
-        avatar: '/assets/avatar-amina.png',
-        name: 'Amina S.',
-        city: 'Abuja',
-        quote: 'The palm oil is very fresh and the delivery was super fast. Highly recommended!'
-      },
-      {
-        avatar: '/assets/avatar-chinedu.png',
-        name: 'Chinedu K.',
-        city: 'Kaduna',
-        quote: "Best garri quality I've bought in years. Will definitely order again."
-      }
-    ],
-    [
-      {
-        avatar: '/assets/avatar-amina.png',
-        name: 'Hajiya Fatima',
-        city: 'Minna',
-        quote: 'The Plantain Flour and Cassava Flour are 100% pure and grit-free. My entire household loves it!'
-      },
-      {
-        avatar: '/assets/avatar-chinedu.png',
-        name: 'Emeka O.',
-        city: 'Suleja',
-        quote: 'Reliable doorstep delivery in Suleja. Jerrycan sealed tightly with zero leakage!'
-      }
-    ]
-  ];
-
   return (
     <section id="products" className="py-6 sm:py-8 bg-white dark:bg-slate-950">
       <div className="w-full max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-10 space-y-7">
@@ -234,6 +191,7 @@ export const ProductStore: React.FC<ProductStoreProps> = ({
                   id: item.id,
                   name: item.name,
                   image: item.image,
+                  highResImage: (item as any).highResImage || foundInCatalog.highResImage,
                   price: item.price,
                   originalPrice: item.originalPrice,
                   volumeOrWeight: item.spec,
@@ -246,12 +204,12 @@ export const ProductStore: React.FC<ProductStoreProps> = ({
                 return (
                   <div
                     key={item.id}
-                    className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200/90 dark:border-slate-800 p-2.5 flex flex-col justify-between shadow-2xs hover:shadow-md transition-shadow group relative"
+                    className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200/90 dark:border-slate-800 p-2.5 flex flex-col justify-between shadow-2xs hover:shadow-md transition-shadow group relative h-full"
                   >
-                    {/* Top Badges: Best Seller + Wishlist Heart */}
+                    {/* Image Stage (Clean, zero floating badges) */}
                     <div className="relative mb-2">
                       <div 
-                        className="aspect-4/3 w-full rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-800 relative cursor-pointer" 
+                        className="aspect-[4/3] w-full rounded-lg overflow-hidden bg-stone-100 dark:bg-slate-800/80 border border-slate-100 dark:border-slate-800/60 relative cursor-pointer flex items-center justify-center" 
                         onClick={() => handleProductClick(activeProduct)}
                         title="Click to view packaging and details"
                       >
@@ -262,28 +220,21 @@ export const ProductStore: React.FC<ProductStoreProps> = ({
                         />
                       </div>
 
-                      {/* Best Seller Badge */}
-                      {item.isBestSeller && (
-                        <div className="absolute top-1.5 left-1.5 bg-[#E55318] text-white text-[9px] font-black uppercase px-1.5 py-0.5 rounded shadow-xs pointer-events-none">
-                          Best Seller
-                        </div>
-                      )}
-
-                      {/* Wishlist Heart Button */}
+                      {/* Wishlist Button (Clean rounded-md, no pill) */}
                       <button
                         onClick={(e) => toggleWishlist(item.id, e)}
-                        className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-white/90 dark:bg-slate-800/90 backdrop-blur-xs flex items-center justify-center text-slate-700 dark:text-slate-200 hover:text-red-600 transition-colors shadow-2xs"
+                        className="absolute top-1.5 right-1.5 w-6 h-6 rounded-md bg-white/90 dark:bg-slate-800/90 backdrop-blur-xs flex items-center justify-center text-slate-700 dark:text-slate-200 hover:text-red-600 transition-colors shadow-2xs"
                         title="Add to Wishlist"
                       >
                         <Heart className={`w-3.5 h-3.5 ${isFavorited ? 'fill-red-600 text-red-600' : ''}`} />
                       </button>
                     </div>
 
-                    {/* Product Info */}
+                    {/* Product Info (Refined Typography) */}
                     <div className="space-y-1 mb-2">
                       <h3
                         onClick={() => handleProductClick(activeProduct)}
-                        className="text-xs sm:text-[13px] font-black text-slate-900 dark:text-white leading-tight line-clamp-1 hover:text-[#E55318] cursor-pointer"
+                        className="text-xs sm:text-[13px] font-bold text-slate-900 dark:text-white leading-tight line-clamp-1 hover:text-[#E55318] cursor-pointer"
                         title={item.name}
                       >
                         {item.name}
@@ -293,16 +244,16 @@ export const ProductStore: React.FC<ProductStoreProps> = ({
                         {item.spec}
                       </div>
 
-                      {/* Price Row */}
-                      <div className="flex items-center gap-1.5 flex-wrap pt-0.5">
-                        <span className="font-mono font-black text-xs sm:text-sm text-[#E55318] dark:text-orange-400">
+                      {/* Price Row (Clean, zero loud badge chips) */}
+                      <div className="flex items-baseline gap-1.5 flex-wrap pt-0.5">
+                        <span className="font-mono font-bold text-xs sm:text-sm text-[#E55318] dark:text-orange-400">
                           ₦{item.price.toLocaleString()}
                         </span>
                         <span className="text-[10px] text-slate-400 line-through">
                           ₦{item.originalPrice.toLocaleString()}
                         </span>
-                        <span className="text-[9px] font-bold text-red-700 bg-red-100 dark:bg-red-950 dark:text-red-300 px-1 py-0.2 rounded">
-                          {item.discount}
+                        <span className="text-[10px] font-semibold text-emerald-700 dark:text-emerald-400">
+                          ({item.discount})
                         </span>
                       </div>
 
@@ -313,7 +264,7 @@ export const ProductStore: React.FC<ProductStoreProps> = ({
                             <Star key={i} className="w-2.5 h-2.5 fill-amber-500" />
                           ))}
                         </div>
-                        <span className="font-bold text-[10px]">{item.rating} ({item.reviews})</span>
+                        <span className="font-semibold text-[10px]">{item.rating} ({item.reviews})</span>
                       </div>
                     </div>
 
@@ -456,132 +407,201 @@ export const ProductStore: React.FC<ProductStoreProps> = ({
 
         </div>
 
-        {/* ROW 2: 3-CARD SHOWCASE (WHOLESALE B2B, WHAT OUR CUSTOMERS SAY, WE DELIVER NATIONWIDE) */}
-        <div id="wholesale-b2b" className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        {/* ROW 2: COMMERCIAL SERVICES & COMPREHENSIVE SOCIAL PROOF */}
+        <div className="space-y-6">
           
-          {/* Card 1: Wholesale & B2B Supply (Dark Hunter Green) */}
-          <div className="bg-[#043323] text-white rounded-2xl p-4 sm:p-5 flex flex-col justify-between relative overflow-hidden shadow-sm">
-            <div className="space-y-2 z-10 max-w-[65%]">
-              <div className="flex items-center gap-1.5 text-xs font-black tracking-wide text-emerald-300">
-                <Package className="w-4 h-4" />
-                <span>Wholesale &amp; B2B Supply</span>
+          {/* 2-Column Services Row (Clean, reduced banners) */}
+          <div id="wholesale-b2b" className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            
+            {/* Card 1: Wholesale & B2B Supply */}
+            <div className="bg-[#043323] text-white rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden shadow-xs">
+              <div className="space-y-2.5 z-10 max-w-[70%]">
+                <div className="flex items-center gap-1.5 text-xs font-bold tracking-wide text-emerald-300 uppercase">
+                  <Package className="w-4 h-4" />
+                  <span>Wholesale &amp; Commercial Supply</span>
+                </div>
+                <h3 className="text-lg font-bold text-white leading-snug">
+                  Bulk Foodstuffs for Hotels, Restaurants &amp; Bakeries
+                </h3>
+                <p className="text-xs text-emerald-100/90 leading-relaxed font-normal">
+                  Guaranteed volume supply in 25L/50L drums and 25kg/50kg sacks with dedicated wholesale depot invoicing.
+                </p>
+                <div className="pt-2">
+                  <a
+                    href={createWhatsAppUrl("Hello Reyflux Enterprises, I would like to request a wholesale quotation for bulk supply.")}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-4 py-2 bg-white text-[#043323] hover:bg-emerald-50 rounded-lg text-xs font-bold shadow-xs transition-colors"
+                  >
+                    <span>Get Wholesale Quote</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </a>
+                </div>
               </div>
-              <p className="text-xs text-emerald-100/90 leading-relaxed font-normal">
-                Specialized supply for hotels, <strong className="text-white font-bold">restaurants</strong>, schools, bakeries and food processing companies.
-              </p>
-              <div className="pt-2">
-                <a
-                  href={createWhatsAppUrl("Hello Reyflux Enterprises, I would like to request a wholesale quotation for bulk supply.")}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-white text-[#043323] hover:bg-emerald-50 rounded-lg text-xs font-bold shadow-xs transition-colors"
-                >
-                  <span>Get Wholesale Quote</span>
-                  <ArrowRight className="w-3 h-3" />
-                </a>
+
+              {/* Graphic on right */}
+              <div className="absolute right-0 bottom-0 top-0 w-36 sm:w-44 flex items-end justify-end pointer-events-none p-2 opacity-90">
+                <img
+                  src="/assets/wholesale-sacks.png"
+                  alt="Wholesale grain sacks and palm oil containers"
+                  className="max-h-full object-contain object-bottom"
+                />
               </div>
             </div>
 
-            {/* Graphic on right: Sacks & Palm Oil Container */}
-            <div className="absolute right-0 bottom-0 top-0 w-36 sm:w-40 flex items-end justify-end pointer-events-none p-2">
-              <img
-                src="/assets/wholesale-sacks.png"
-                alt="Wholesale grain sacks and palm oil containers"
-                className="max-h-full object-contain object-bottom"
-              />
+            {/* Card 2: We Deliver Nationwide */}
+            <div className="bg-[#F8FAFC] dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-2xl p-5 flex flex-col justify-between shadow-xs space-y-3">
+              <div>
+                <div className="flex items-center gap-1.5 text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wide">
+                  <Truck className="w-4 h-4 text-[#0B7B4B]" />
+                  <span>Nationwide Logistics Coverage</span>
+                </div>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white mt-1 leading-snug">
+                  From Suleja Depot to Every State in Nigeria
+                </h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  Same-day local dispatch in Suleja &amp; Abuja FCT; 24–48hr interstate waybill.
+                </p>
+              </div>
+
+              <div className="flex items-center justify-between gap-4 pt-1">
+                <div className="w-1/2 flex items-center justify-center">
+                  <img
+                    src="/assets/nigeria-map.png"
+                    alt="Nigeria map delivery coverage"
+                    className="max-h-24 w-auto object-contain"
+                  />
+                </div>
+
+                <div className="w-1/2 space-y-1.5 text-xs text-slate-700 dark:text-slate-300 font-medium">
+                  {['Suleja & Niger State (Same-Day)', 'Abuja FCT (Same-Day)', 'Kaduna & Kano (24-48h)', 'Lagos & All 36 States (Waybill)'].map((st, i) => (
+                    <div key={i} className="flex items-center gap-1.5">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-[#0B7B4B] shrink-0" />
+                      <span>{st}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
+
           </div>
 
-          {/* Card 2: What Our Customers Say (Reviews Carousel) */}
-          <div className="bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-2xl p-4 sm:p-5 flex flex-col justify-between shadow-2xs space-y-3">
+          {/* DEDICATED SOCIAL PROOF & VERIFIED REVIEWS SHOWCASE */}
+          <div className="bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-2xl p-5 sm:p-6 shadow-xs space-y-5">
             
-            {/* Header + Carousel Arrows */}
-            <div className="flex items-center justify-between">
-              <h3 className="font-black text-sm sm:text-base text-slate-900 dark:text-white">
-                What Our Customers Say
-              </h3>
-              <div className="flex items-center gap-1">
-                <button
-                  onClick={() => setTestimonialPage((prev) => (prev === 0 ? TESTIMONIALS.length - 1 : prev - 1))}
-                  className="w-6 h-6 rounded-full border border-slate-300 dark:border-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                  title="Previous reviews"
-                >
-                  <ChevronLeft className="w-3.5 h-3.5" />
-                </button>
-                <button
-                  onClick={() => setTestimonialPage((prev) => (prev === TESTIMONIALS.length - 1 ? 0 : prev + 1))}
-                  className="w-6 h-6 rounded-full border border-slate-300 dark:border-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                  title="Next reviews"
-                >
-                  <ChevronRight className="w-3.5 h-3.5" />
-                </button>
+            {/* Social Proof Header & Stats Scorecard */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-100 dark:border-slate-800">
+              <div className="space-y-1">
+                <div className="text-xs font-bold text-[#E55318] dark:text-orange-400 uppercase tracking-wider">
+                  Social Proof · Real Customer Feedback
+                </div>
+                <h3 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
+                  Trusted by Over 850+ Households &amp; Food Vendors
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 font-normal leading-relaxed">
+                  Read authentic experiences from verified customers across Niger State, Abuja FCT, and interstate delivery destinations.
+                </p>
+              </div>
+
+              {/* Rating Summary Block */}
+              <div className="flex items-center gap-3 shrink-0 p-3 bg-stone-50 dark:bg-slate-800/60 rounded-xl border border-slate-200/80 dark:border-slate-700">
+                <div className="text-2xl font-black text-slate-900 dark:text-white font-mono leading-none">
+                  4.9
+                </div>
+                <div className="space-y-0.5">
+                  <div className="flex text-amber-500">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-3 h-3 fill-amber-500" />
+                    ))}
+                  </div>
+                  <div className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+                    850+ Verified Ratings
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Testimonials Side by Side */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-              {TESTIMONIALS[testimonialPage].map((t, idx) => (
-                <div key={idx} className="flex items-start gap-2.5">
-                  <img
-                    src={t.avatar}
-                    alt={t.name}
-                    className="w-9 h-9 rounded-full object-cover shrink-0 border border-slate-200 dark:border-slate-700"
-                  />
-                  <div className="space-y-1">
-                    <div className="flex text-amber-500">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="w-2.5 h-2.5 fill-amber-500" />
-                      ))}
+            {/* 4 Verified Reviews Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {[
+                {
+                  avatar: '/assets/avatar-amina.png',
+                  name: 'Amina S.',
+                  location: 'Abuja FCT (Kubwa)',
+                  product: 'Pure Organic Palm Oil 25L',
+                  date: 'November 2026',
+                  comment: 'The palm oil has no chemical smell, no artificial red dye, and does not separate or curdle. Soup aroma was unmatched. Same-day delivery to Kubwa!'
+                },
+                {
+                  avatar: '/assets/avatar-chinedu.png',
+                  name: 'Chinedu K.',
+                  location: 'Kaduna Central',
+                  product: 'Premium Yellow Garri 25kg',
+                  date: 'October 2026',
+                  comment: 'Extra dry, crispy, and zero stones or sand. Fried with genuine palm oil. The swallow texture is exceptional.'
+                },
+                {
+                  avatar: '/assets/avatar-amina.png',
+                  name: 'Hajiya Fatima',
+                  location: 'Minna, Niger State',
+                  product: 'Unripe Plantain Flour 5kg',
+                  date: 'November 2026',
+                  comment: '100% authentic unripe plantain flour. Very smooth when prepared for swallow, perfect for our healthy diabetic meal plan.'
+                },
+                {
+                  avatar: '/assets/avatar-chinedu.png',
+                  name: 'Alhaji Babangida',
+                  location: 'Suleja Commercial Canteen',
+                  product: 'Palm Oil 50L Bulk Drum',
+                  date: 'October 2026',
+                  comment: 'We buy monthly for our restaurant. The jerrycans and drums are sealed with tamper-proof lids. Consistent depot quality.'
+                }
+              ].map((rev, idx) => (
+                <div 
+                  key={idx} 
+                  className="bg-stone-50/70 dark:bg-slate-800/40 border border-slate-200/80 dark:border-slate-800 rounded-xl p-4 flex flex-col justify-between space-y-3"
+                >
+                  <div className="space-y-2">
+                    {/* Stars & Verified Proof */}
+                    <div className="flex items-center justify-between text-xs">
+                      <div className="flex text-amber-500">
+                        {[...Array(5)].map((_, i) => (
+                          <Star key={i} className="w-3 h-3 fill-amber-500" />
+                        ))}
+                      </div>
+                      <span className="text-[10px] font-semibold text-[#0B7B4B] dark:text-emerald-400 flex items-center gap-1">
+                        <CheckCircle2 className="w-3 h-3" />
+                        <span>Verified Buyer</span>
+                      </span>
                     </div>
-                    <p className="text-[11px] text-slate-700 dark:text-slate-300 italic leading-snug line-clamp-3">
-                      "{t.quote}"
+
+                    {/* Review text */}
+                    <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed font-normal">
+                      "{rev.comment}"
                     </p>
-                    <span className="block text-[10px] font-bold text-slate-500 dark:text-slate-400">
-                      – {t.name}, {t.city}
-                    </span>
+                  </div>
+
+                  {/* Customer Meta */}
+                  <div className="pt-2 border-t border-slate-200/60 dark:border-slate-800/60 flex items-center gap-2.5">
+                    <img
+                      src={rev.avatar}
+                      alt={rev.name}
+                      className="w-8 h-8 rounded-lg object-cover border border-slate-200 dark:border-slate-700 shrink-0"
+                    />
+                    <div className="text-[11px] leading-tight">
+                      <div className="font-bold text-slate-900 dark:text-white">
+                        {rev.name}
+                      </div>
+                      <div className="text-slate-500 dark:text-slate-400">
+                        {rev.location}
+                      </div>
+                      <div className="text-[10px] text-[#E55318] dark:text-orange-400 font-medium mt-0.5">
+                        {rev.product}
+                      </div>
+                    </div>
                   </div>
                 </div>
               ))}
-            </div>
-
-          </div>
-
-          {/* Card 3: We Deliver Nationwide (Nigeria Map & Checklist) */}
-          <div className="bg-[#F8FAFC] dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-2xl p-4 sm:p-5 flex flex-col justify-between shadow-2xs space-y-3">
-            
-            {/* Header */}
-            <div>
-              <div className="flex items-center gap-1.5 text-xs font-bold text-slate-900 dark:text-white">
-                <Truck className="w-4 h-4 text-[#0B7B4B]" />
-                <span className="font-black text-sm">We Deliver Nationwide</span>
-              </div>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
-                From Suleja to every state in Nigeria.
-              </p>
-            </div>
-
-            {/* Map and Checklist */}
-            <div className="flex items-center justify-between gap-3 pt-1">
-              
-              {/* Nigeria Map with Orange Pins */}
-              <div className="w-1/2 flex items-center justify-center">
-                <img
-                  src="/assets/nigeria-map.png"
-                  alt="Nigeria map delivery coverage"
-                  className="max-h-24 w-auto object-contain"
-                />
-              </div>
-
-              {/* Checklist */}
-              <div className="w-1/2 space-y-1 text-[11px] font-bold text-slate-700 dark:text-slate-300">
-                {['Abuja', 'Suleja', 'Minna', 'Kaduna', 'Kano', 'And all other states'].map((st, i) => (
-                  <div key={i} className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-[#0B7B4B] shrink-0" />
-                    <span>{st}</span>
-                  </div>
-                ))}
-              </div>
-
             </div>
 
           </div>
@@ -590,23 +610,6 @@ export const ProductStore: React.FC<ProductStoreProps> = ({
 
         {/* ROW 3: ALL PRODUCTS CONTINUOUS FEED & SPECIFICATION DIRECTORY */}
         <div id="all-products-feed" className="pt-4 border-t border-slate-200/80 dark:border-slate-800 space-y-6">
-          
-          {/* URGENCY FLASH SALE BANNER */}
-          <FlashSaleTimer
-            claimedPercentage={88}
-            itemsLeft={12}
-            onClaimClick={() => {
-              const el = document.getElementById('discovery-feed');
-              if (el) el.scrollIntoView({ behavior: 'smooth' });
-            }}
-          />
-
-          {/* AI RECOMMENDATION SECTION */}
-          <AiRecommendationSection
-            onAddToCart={onAddToCart}
-            onProductClick={handleProductClick}
-            sessionData={sessionData}
-          />
 
           {/* COMPLETE SPECIFICATIONS & PRICE DIRECTORY TABLE */}
           <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 p-4 sm:p-5 shadow-2xs space-y-4">

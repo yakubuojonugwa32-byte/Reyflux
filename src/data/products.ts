@@ -17,6 +17,7 @@ export interface Product {
   rating: number;
   reviewsCount: number;
   image: string;
+  highResImage?: string;
   badgeText?: string;
   uses: string[];
 }
@@ -42,6 +43,7 @@ export const PRODUCTS: Product[] = [
     rating: 4.9,
     reviewsCount: 128,
     image: '/assets/product-palm-oil.png',
+    highResImage: '/assets/palm-oil-hires.jpg',
     badgeText: 'Lowest Price in 30 Days',
     uses: ['Soup & Stew Preparation', 'Local Delicacies', 'Traditional Cooking', 'Bakery & Food Processing']
   },
@@ -64,6 +66,7 @@ export const PRODUCTS: Product[] = [
     rating: 5.0,
     reviewsCount: 94,
     image: '/assets/hero-clean.png',
+    highResImage: '/assets/palm-oil-hires.jpg',
     badgeText: 'Save ₦8,000 Today',
     uses: ['Restaurants & Caterers', 'Family Monthly Stock', 'Confectionery']
   },
@@ -86,6 +89,7 @@ export const PRODUCTS: Product[] = [
     rating: 4.9,
     reviewsCount: 215,
     image: '/assets/aistudio/image_6b1c0bf2.png',
+    highResImage: '/assets/palm-oil-hires.jpg',
     badgeText: 'Flyer Featured • 16% OFF',
     uses: ['Commercial Food Production', 'Bulk Resell', 'Hotels & Caterers']
   },
@@ -105,6 +109,7 @@ export const PRODUCTS: Product[] = [
     rating: 5.0,
     reviewsCount: 42,
     image: '/assets/hero-clean.png',
+    highResImage: '/assets/palm-oil-hires.jpg',
     badgeText: 'Wholesale Super Deal',
     uses: ['Industrial Catering', 'Institutional Kitchens', 'Export & Bulk Distribution']
   },
@@ -127,6 +132,7 @@ export const PRODUCTS: Product[] = [
     rating: 5.0,
     reviewsCount: 168,
     image: '/assets/aistudio/image_f9f0ee99.png',
+    highResImage: '/assets/palm-oil-hires.jpg',
     badgeText: 'Authentic Reyflux Bottles • Top Choice',
     uses: ['Daily Cooking & Stews', 'Kitchen Convenience', 'Restaurants & Homes']
   },
@@ -151,6 +157,7 @@ export const PRODUCTS: Product[] = [
     rating: 4.8,
     reviewsCount: 94,
     image: '/assets/product-garri.png',
+    highResImage: '/assets/foodstuffs-hires.jpg',
     badgeText: '18% Price Drop',
     uses: ['Eba Swallow', 'Garri Soaking & Snacks', 'Household Meals']
   },
@@ -173,6 +180,7 @@ export const PRODUCTS: Product[] = [
     rating: 4.8,
     reviewsCount: 164,
     image: '/assets/product-garri.png',
+    highResImage: '/assets/foodstuffs-hires.jpg',
     badgeText: '21% Price Drop',
     uses: ['Eba Swallow', 'Garri Soaking & Snacks', 'Household Meals']
   },
@@ -195,6 +203,7 @@ export const PRODUCTS: Product[] = [
     rating: 4.9,
     reviewsCount: 88,
     image: '/assets/product-garri.png',
+    highResImage: '/assets/foodstuffs-hires.jpg',
     badgeText: '17% OFF Bulk Bag',
     uses: ['Boarding Schools', 'Large Families', 'Restaurants']
   },
@@ -217,6 +226,7 @@ export const PRODUCTS: Product[] = [
     rating: 4.9,
     reviewsCount: 110,
     image: '/assets/product-garri.png',
+    highResImage: '/assets/foodstuffs-hires.jpg',
     badgeText: 'Extra Sour & Crunchy',
     uses: ['Cold Soaking Snack', 'Fine Eba', 'Student Favorite']
   },
@@ -238,6 +248,7 @@ export const PRODUCTS: Product[] = [
     rating: 4.8,
     reviewsCount: 76,
     image: '/assets/product-cassava-flour.png',
+    highResImage: '/assets/foodstuffs-hires.jpg',
     badgeText: '100% Odorless • 15% OFF',
     uses: ['Gluten-Free Baking', 'Fufu & Amala Blend', 'Industrial Food Binding']
   },
@@ -257,6 +268,7 @@ export const PRODUCTS: Product[] = [
     rating: 4.8,
     reviewsCount: 76,
     image: '/assets/product-cassava-flour.png',
+    highResImage: '/assets/foodstuffs-hires.jpg',
     badgeText: '100% Odorless • 19% OFF',
     uses: ['Gluten-Free Baking', 'Fufu & Amala Blend', 'Industrial Food Binding']
   },
@@ -276,6 +288,7 @@ export const PRODUCTS: Product[] = [
     rating: 4.9,
     reviewsCount: 45,
     image: '/assets/product-cassava-flour.png',
+    highResImage: '/assets/foodstuffs-hires.jpg',
     badgeText: 'Bakery Grade • Save ₦11,000',
     uses: ['Commercial Bakeries', 'Biscuit & Pastry Processing', 'Industrial Starch Source']
   },
@@ -300,6 +313,7 @@ export const PRODUCTS: Product[] = [
     rating: 4.7,
     reviewsCount: 65,
     image: '/assets/product-plantain-flour.png',
+    highResImage: '/assets/foodstuffs-hires.jpg',
     badgeText: 'Diabetic Friendly • 19% OFF',
     uses: ['Healthy Plantain Amala', 'Low Glycemic Meals', 'Gluten-Free Fitness Diet']
   },
@@ -322,6 +336,7 @@ export const PRODUCTS: Product[] = [
     rating: 4.9,
     reviewsCount: 112,
     image: '/assets/product-plantain-flour.png',
+    highResImage: '/assets/foodstuffs-hires.jpg',
     badgeText: 'Diabetic Friendly • 19% OFF',
     uses: ['Healthy Plantain Amala', 'Low Glycemic Meals', 'Gluten-Free Fitness Diet']
   },
@@ -346,6 +361,7 @@ export const PRODUCTS: Product[] = [
     rating: 4.9,
     reviewsCount: 140,
     image: '/assets/product-cassava-flour.png',
+    highResImage: '/assets/foodstuffs-hires.jpg',
     badgeText: '21% Price Drop • Stretchy & Smooth',
     uses: ['Amala & Ewedu Swallow', 'Restaurant Buka Style', 'Traditional Feasts']
   },
@@ -365,6 +381,7 @@ export const PRODUCTS: Product[] = [
     rating: 5.0,
     reviewsCount: 82,
     image: '/assets/product-cassava-flour.png',
+    highResImage: '/assets/foodstuffs-hires.jpg',
     badgeText: 'Buka Special • Save ₦8,000',
     uses: ['Buka Eateries', 'Event Catering', 'Large Household Swallow']
   },
@@ -386,6 +403,7 @@ export const PRODUCTS: Product[] = [
     rating: 4.8,
     reviewsCount: 58,
     image: '/assets/product-groundnut.png',
+    highResImage: '/assets/foodstuffs-hires.jpg',
     badgeText: 'Raw Farm Fresh • Save ₦5,000',
     uses: ['Peanut Butter & Kulikuli', 'Cooking Oil Processing', 'Home Preparation']
   },
@@ -408,6 +426,7 @@ export const PRODUCTS: Product[] = [
     rating: 4.9,
     reviewsCount: 175,
     image: '/assets/product-groundnut.png',
+    highResImage: '/assets/foodstuffs-hires.jpg',
     badgeText: 'Extra Crunchy • Garri Companion',
     uses: ['Garri Soaking Companion', 'Snacking', 'Baking & Confectionery']
   },

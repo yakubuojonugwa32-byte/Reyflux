@@ -138,7 +138,7 @@ export const LiveAiChatDrawer: React.FC<LiveAiChatDrawerProps> = ({ isOpen, onCl
             <div>
               <div className="flex items-center gap-1.5">
                 <h2 className="text-sm font-extrabold leading-tight">Reyflux AI Assistant</h2>
-                <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="text-[10px] text-emerald-200 font-bold uppercase tracking-wider">· Online</span>
               </div>
               <p className="text-[10px] text-amber-100 font-medium">Foodstuffs & Orders Advisor (Suleja)</p>
             </div>
@@ -220,7 +220,7 @@ export const LiveAiChatDrawer: React.FC<LiveAiChatDrawerProps> = ({ isOpen, onCl
             <button
               key={idx}
               onClick={() => handleSendMessage(prompt)}
-              className="text-[10px] font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 hover:bg-amber-100 border border-slate-200 dark:border-slate-700 rounded-full px-2.5 py-1 whitespace-nowrap shrink-0 transition-colors shadow-2xs"
+              className="text-[10px] font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 hover:bg-stone-100 border border-slate-200 dark:border-slate-700 rounded-md px-2.5 py-1 whitespace-nowrap shrink-0 transition-colors shadow-2xs"
             >
               {prompt}
             </button>

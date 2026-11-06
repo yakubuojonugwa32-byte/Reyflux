@@ -210,10 +210,10 @@ export const InfiniteProductFeed: React.FC<InfiniteProductFeedProps> = ({
             className="group bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
           >
             <div>
-              {/* Product Image Frame */}
+              {/* Product Image Frame with Uniform Aspect Ratio */}
               <div
                 onClick={() => onProductClick?.(product)}
-                className="relative h-60 bg-gradient-to-b from-slate-100 to-slate-200/80 dark:from-slate-800 dark:to-slate-850 overflow-hidden cursor-pointer group/img"
+                className="relative aspect-[4/3] w-full bg-gradient-to-b from-stone-100 to-stone-200/80 dark:from-slate-800 dark:to-slate-850 overflow-hidden cursor-pointer group/img flex items-center justify-center border-b border-slate-100 dark:border-slate-800"
                 title="Click to view full uncropped image"
               >
                 <img
@@ -224,99 +224,62 @@ export const InfiniteProductFeed: React.FC<InfiniteProductFeedProps> = ({
                 />
 
                 {/* Hover Full Image View Overlay */}
-                <div className="absolute inset-0 bg-slate-950/40 backdrop-blur-[1px] opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs font-black shadow-xl transform translate-y-1 group-hover:translate-y-0 transition-transform">
-                    <ZoomIn className="w-3.5 h-3.5 text-amber-600" />
-                    <span>View Image</span>
+                <div className="absolute inset-0 bg-slate-950/30 backdrop-blur-[1px] opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs font-bold shadow-md transform translate-y-1 group-hover:translate-y-0 transition-transform">
+                    <ZoomIn className="w-3.5 h-3.5 text-[#E55318]" />
+                    <span>View Packaging</span>
                   </span>
                 </div>
 
-                {/* Top Left Badges */}
-                <div className="absolute top-3 left-3 flex flex-col gap-1 items-start z-10 pointer-events-none">
-                  <span className="bg-red-600 text-white text-[10px] font-extrabold uppercase px-2 py-0.5 rounded shadow-sm">
-                    {product.badgeText || 'Best Price'}
-                  </span>
-                  <span className="bg-emerald-600 text-white text-[9px] font-bold px-2 py-0.5 rounded shadow-sm">
-                    100% Organic
-                  </span>
-                </div>
-
-                {/* Top Right Quick Zoom Badge */}
-                <div className="absolute top-3 right-3 z-10">
-                  <span className="flex items-center gap-1 p-1.5 rounded-lg bg-black/60 text-white hover:bg-black/80 backdrop-blur-xs text-[10px] font-bold shadow-sm transition-colors">
-                    <ZoomIn className="w-3.5 h-3.5 text-amber-300" />
-                    <span className="hidden sm:inline">Zoom</span>
-                  </span>
-                </div>
-
-                <div className="absolute bottom-3 right-3 bg-slate-900/80 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-0.5 rounded z-10">
+                {/* Quiet Stock Tag */}
+                <div className="absolute bottom-2.5 right-2.5 bg-slate-900/80 backdrop-blur-xs text-white text-[10px] font-semibold px-2 py-0.5 rounded-md z-10">
                   {product.stockCount} in stock
                 </div>
               </div>
 
-              {/* Card Content */}
-              <div className="p-5 space-y-3">
-                <div className="flex items-center justify-between text-xs text-slate-500">
-                  <span className="font-extrabold text-amber-700 dark:text-amber-400 uppercase tracking-wider text-xs px-2.5 py-0.5 rounded-md bg-amber-100/70 dark:bg-amber-950/60 border border-amber-300/60 dark:border-amber-800">
-                    📦 {product.volumeOrWeight} • {product.unit}
+              {/* Card Content (Refined Typography & Unboxed Metadata) */}
+              <div className="p-4 sm:p-5 space-y-2.5">
+                <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+                  <span className="font-semibold uppercase tracking-wider text-[11px]">
+                    {product.volumeOrWeight} · {product.unit}
                   </span>
-                  <div className="flex items-center gap-1 font-bold text-amber-500">
+                  <div className="flex items-center gap-1 font-semibold text-amber-500">
                     <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
                     <span>{product.rating}</span>
-                    <span className="text-slate-400 font-normal">({product.reviewsCount} reviews)</span>
+                    <span className="text-slate-400 font-normal">({product.reviewsCount})</span>
                   </div>
                 </div>
 
-                {/* Full Unclipped Title */}
-                <h3 className="font-black text-slate-900 dark:text-white text-base leading-snug">
+                {/* Title */}
+                <h3 className="font-bold text-slate-900 dark:text-white text-base leading-snug">
                   {product.name}
                 </h3>
 
-                {/* Full Unclipped Description */}
-                <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed font-normal">
+                {/* Description */}
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
                   {product.description}
                 </p>
 
-                {/* Quality Verification Badges */}
-                <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
-                  <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-300/60 dark:border-emerald-800">
-                    <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                    <span>100% Natural Organic</span>
-                  </span>
-                  <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-md bg-amber-50 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 border border-amber-300/60 dark:border-amber-800">
-                    <span>Zero Preservatives</span>
-                  </span>
-                  <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-md bg-red-50 dark:bg-red-950/80 text-red-800 dark:text-red-300 border border-red-300/60 dark:border-red-800">
-                    <span>No Added Colours</span>
-                  </span>
+                {/* Quality Assurance (Clean unboxed line, zero badge clutter) */}
+                <div className="flex items-center gap-1.5 pt-0.5 text-[11px] text-[#0B7B4B] dark:text-emerald-400 font-medium">
+                  <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
+                  <span>100% Unadulterated · Zero preservatives or artificial colors</span>
                 </div>
 
-                {/* Key Uses / Food Applications */}
+                {/* Culinary Uses (Clean inline text, no pill chips) */}
                 {product.uses && product.uses.length > 0 && (
-                  <div className="space-y-1.5 pt-1">
-                    <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 block">
-                      Recommended Uses:
-                    </span>
-                    <div className="flex flex-wrap gap-1">
-                      {product.uses.map((use, i) => (
-                        <span
-                          key={i}
-                          className="inline-block text-[10px] font-medium px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700"
-                        >
-                          ✓ {use}
-                        </span>
-                      ))}
-                    </div>
+                  <div className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed pt-0.5">
+                    <span className="font-semibold text-slate-700 dark:text-slate-300">Uses: </span>
+                    <span>{product.uses.join(' · ')}</span>
                   </div>
                 )}
 
                 {/* Stock & Depot Availability */}
-                <div className="flex items-center justify-between text-[11px] pt-1.5 border-t border-slate-100 dark:border-slate-800 text-slate-600 dark:text-slate-400">
-                  <span className="flex items-center gap-1 font-semibold text-emerald-700 dark:text-emerald-400">
-                    <CheckCircle2 className="w-3.5 h-3.5" />
-                    <span>{product.stockCount} in stock at Suleja Store</span>
+                <div className="flex items-center justify-between text-[11px] pt-1.5 border-t border-slate-100 dark:border-slate-800 text-slate-500">
+                  <span className="font-medium text-slate-600 dark:text-slate-400">
+                    Suleja Central Depot
                   </span>
-                  <span className="text-[10px] text-slate-500 font-bold">
+                  <span className="font-semibold text-[#0B7B4B] dark:text-emerald-400">
                     Direct Mill Supply
                   </span>
                 </div>

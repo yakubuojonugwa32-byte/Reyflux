@@ -45,10 +45,10 @@ export const DeliveryEstimator: React.FC = () => {
       <div className="w-full max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-10 space-y-6">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/80 border border-emerald-300 dark:border-emerald-800 text-emerald-900 dark:text-emerald-300 text-xs font-bold uppercase tracking-wider">
-            <Truck className="w-4 h-4 text-emerald-600" />
-            <span>NATIONWIDE DOORSTEP LOGISTICS</span>
+        <div className="text-center max-w-3xl mx-auto space-y-2">
+          <div className="text-xs font-semibold tracking-wider text-[#0B7B4B] dark:text-emerald-400 uppercase flex items-center justify-center gap-1.5">
+            <Truck className="w-4 h-4" />
+            <span>Nationwide Doorstep Logistics</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             Delivery & Live Order Tracker
@@ -177,7 +177,7 @@ export const DeliveryEstimator: React.FC = () => {
               <div className="p-4 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 space-y-3 text-xs">
                 <div className="flex justify-between items-center pb-2 border-b border-slate-200 dark:border-slate-800">
                   <span className="font-extrabold text-slate-900 dark:text-white font-mono">{trackingResult.id}</span>
-                  <span className="bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 font-bold px-2.5 py-0.5 rounded-full text-[10px]">
+                  <span className="bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 font-bold px-2 py-0.5 rounded-md text-[10px]">
                     {trackingResult.status}
                   </span>
                 </div>

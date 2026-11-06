@@ -86,14 +86,14 @@ export const FlyerModal: React.FC<FlyerModalProps> = ({ isOpen, onClose }) => {
                 {/* Hotspot Indicators */}
                 {!isZoomed && (
                   <>
-                    <div className="absolute top-[35%] left-[45%] group/spot bg-red-600/90 text-white text-[11px] font-bold px-2.5 py-1 rounded-full shadow-lg border border-white flex items-center gap-1">
-                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                    <div className="absolute top-[35%] left-[45%] group/spot bg-stone-900/90 text-white text-[11px] font-semibold px-2.5 py-1 rounded-md shadow-md border border-white/20 flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-xs bg-emerald-400" />
                       <span>Palm Oil (100% Organic)</span>
                     </div>
 
-                    <div className="absolute top-[60%] left-[25%] group/spot bg-amber-600/90 text-white text-[11px] font-bold px-2.5 py-1 rounded-full shadow-lg border border-white flex items-center gap-1">
-                      <span className="w-2 h-2 rounded-full bg-amber-300" />
-                      <span>Garri & Cassava Flour</span>
+                    <div className="absolute top-[60%] left-[25%] group/spot bg-stone-900/90 text-white text-[11px] font-semibold px-2.5 py-1 rounded-md shadow-md border border-white/20 flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-xs bg-amber-400" />
+                      <span>Garri &amp; Cassava Flour</span>
                     </div>
                   </>
                 )}

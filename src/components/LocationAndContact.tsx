@@ -28,10 +28,10 @@ Message: ${formState.message || 'I want to inquire about your organic foodstuffs
       <div className="w-full max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-10 space-y-6">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-red-100 dark:bg-red-950/80 border border-red-300 dark:border-red-800 text-red-900 dark:text-red-300 text-xs font-bold uppercase tracking-wider">
-            <MapPin className="w-4 h-4 text-red-600" />
-            <span>VISIT OR CONTACT OUR SULEJA DEPOT</span>
+        <div className="text-center max-w-3xl mx-auto space-y-2">
+          <div className="text-xs font-semibold tracking-wider text-[#DC2626] dark:text-red-400 uppercase flex items-center justify-center gap-1.5">
+            <MapPin className="w-4 h-4" />
+            <span>Visit Or Contact Our Suleja Depot</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             Address, Hotlines & Direct Inquiries
@@ -99,7 +99,7 @@ Message: ${formState.message || 'I want to inquire about your organic foodstuffs
               <div className="absolute inset-0 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:16px_16px] opacity-20 pointer-events-none" />
               
               <div className="relative z-10 space-y-2">
-                <div className="inline-flex items-center gap-1.5 bg-red-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow-md">
+                <div className="inline-flex items-center gap-1.5 bg-red-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-md shadow-xs">
                   <Navigation className="w-3 h-3" />
                   <span>Suleja Depot Location</span>
                 </div>

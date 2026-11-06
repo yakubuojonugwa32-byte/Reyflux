@@ -43,10 +43,10 @@ Please confirm delivery timeline and payment terms.`;
       <div className="w-full max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-10 space-y-6">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-100 dark:bg-amber-950/80 border border-amber-300 dark:border-amber-800 text-amber-900 dark:text-amber-300 text-xs font-bold uppercase tracking-wider">
-            <Building2 className="w-4 h-4 text-amber-600" />
-            <span>COMMERCIAL & BULK DISTRIBUTORS</span>
+        <div className="text-center max-w-3xl mx-auto space-y-2">
+          <div className="text-xs font-semibold tracking-wider text-[#E55318] dark:text-orange-400 uppercase flex items-center justify-center gap-1.5">
+            <Building2 className="w-4 h-4" />
+            <span>Commercial &amp; Bulk Distributors</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             Wholesale & B2B Supply Portal
@@ -164,7 +164,7 @@ Please confirm delivery timeline and payment terms.`;
                 <FileText className="w-5 h-5 text-amber-400" />
                 <h3 className="font-extrabold text-base">Commercial Quotation</h3>
               </div>
-              <span className="text-[10px] font-bold bg-amber-500/20 text-amber-300 px-2.5 py-1 rounded-full uppercase border border-amber-500/30">
+              <span className="text-[10px] font-bold bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-md uppercase border border-amber-500/30">
                 Official Quote
               </span>
             </div>

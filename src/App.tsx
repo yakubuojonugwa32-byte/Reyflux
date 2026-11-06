@@ -11,8 +11,8 @@ import { AdminDashboard } from './components/AdminDashboard';
 import { LiveAiChatDrawer } from './components/LiveAiChatDrawer';
 import { Footer } from './components/Footer';
 import { Product } from './data/products';
-import { Bot, Phone } from 'lucide-react';
-import { COMPANY_INFO, createWhatsAppUrl } from './data/companyInfo';
+import { Phone, Sparkles } from 'lucide-react';
+import { createWhatsAppUrl } from './data/companyInfo';
 
 export default function App() {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
@@ -123,35 +123,37 @@ export default function App() {
 
       </main>
 
-      {/* Floating Action Buttons (Bottom Right) */}
-      <div className="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-3">
-        
-        {/* Floating WhatsApp Quick Button */}
+      {/* Floating Action Buttons Dock (Lower Right Corner) */}
+      <aside 
+        aria-label="Quick Contact & Assistant"
+        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 flex items-center gap-2.5 pointer-events-auto"
+      >
+        {/* Floating WhatsApp Quick Action Button */}
         <a
-          href={createWhatsAppUrl("Hello Reyflux Enterprises, I am reaching out to order Palm Oil, Garri, Cassava Flour, Plantain Flour, Amala Flour, or Groundnut.")}
+          href={createWhatsAppUrl("Hello Reyflux Enterprises, I am reaching out to order Palm Oil, Garri, Flour, or Groundnut.")}
           target="_blank"
           rel="noopener noreferrer"
-          className="group flex items-center gap-2 p-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs rounded-full shadow-2xl transition-all transform hover:scale-105"
+          className="group flex items-center gap-2 px-3.5 py-2.5 bg-[#16A34A] hover:bg-[#15803D] text-white font-bold text-xs rounded-full shadow-lg shadow-green-600/30 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0"
           title="Direct WhatsApp Order"
         >
-          <Phone className="w-5 h-5" />
-          <span className="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-300 whitespace-nowrap text-xs">
-            WhatsApp ({COMPANY_INFO.phones[0]})
+          <Phone className="w-4 h-4 shrink-0" />
+          <span className="hidden sm:inline whitespace-nowrap text-xs">
+            WhatsApp Order
           </span>
         </a>
 
-        {/* Floating Live AI Chat Button */}
+        {/* Floating AI Assistant Quick Action Button */}
         <button
           onClick={() => setIsAiChatOpen(true)}
-          className="relative group flex items-center gap-2 px-4 py-3.5 bg-gradient-to-r from-amber-600 via-orange-600 to-red-600 hover:opacity-95 text-white font-extrabold text-xs rounded-full shadow-2xl transition-all transform hover:scale-105"
-          title="Open Live AI Assistant"
+          className="flex items-center gap-2 px-3.5 py-2.5 bg-white dark:bg-slate-900 border border-[#E2E8F0] dark:border-slate-700 hover:border-[#F97316] text-[#0F172A] dark:text-white font-bold text-xs rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0"
+          title="Open AI Foodstuffs Assistant"
         >
-          <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-emerald-400 border-2 border-white rounded-full animate-ping" />
-          <Bot className="w-5 h-5 animate-bounce" />
-          <span className="text-xs">Live AI Chat</span>
+          <Sparkles className="w-4 h-4 text-[#F97316] shrink-0" />
+          <span className="hidden sm:inline whitespace-nowrap text-xs">
+            Ask AI
+          </span>
         </button>
-
-      </div>
+      </aside>
 
       {/* Footer Sign-off */}
       <Footer onOpenFlyer={() => setIsFlyerOpen(true)} />
